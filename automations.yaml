@@ -1,0 +1,87 @@
+- id: '1673351269459'
+  alias: Encender Cine
+  description: Enciende la tele y todas las luces
+  trigger:
+  - platform: device
+    device_id: d9192629be7456ee8c341b137d2eac5a
+    domain: media_player
+    entity_id: media_player.television
+    type: turned_on
+  condition:
+  - condition: sun
+    before: sunrise
+    after: sunset
+  action:
+  - type: turn_on
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
+    brightness_pct: 90
+    flash: long
+  - type: turn_on
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele
+    domain: light
+    brightness_pct: 100
+  mode: single
+- id: '1673351355869'
+  alias: Apagar Cine
+  description: Apaga la tele y todas las luces del salón
+  trigger:
+  - platform: device
+    device_id: d9192629be7456ee8c341b137d2eac5a
+    domain: media_player
+    entity_id: media_player.television
+    type: turned_off
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
+  - type: turn_off
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele
+    domain: light
+  mode: single
+- id: '1673456675256'
+  alias: Aspirar cocina
+  description: Aspira el area de la cocina
+  trigger: []
+  condition: []
+  action:
+  - service: xiaomi_miio.vacuum_clean_zone
+    data:
+      repeats: 2
+      zone:
+      - - 20666
+        - 20734
+        - 23666
+        - 26084
+    target:
+      entity_id: vacuum.aspirador
+  mode: single
+- id: '1673517960702'
+  alias: Auto - Encender Cine
+  description: Si está la tele encendida cuando se va el sol, enciende las luces de
+    la tele.
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: 0
+  condition:
+  - condition: device
+    device_id: d9192629be7456ee8c341b137d2eac5a
+    domain: media_player
+    entity_id: media_player.television
+    type: is_on
+  action:
+  - type: turn_on
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele
+    domain: light
+  - type: turn_on
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
+  mode: single

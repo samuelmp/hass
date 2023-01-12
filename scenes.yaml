@@ -1,0 +1,54 @@
+- id: '1673350983620'
+  name: Encender Tele
+  entities:
+    media_player.tele:
+      friendly_name: Tele
+      supported_features: 152461
+      icon: mdi:television
+      state: 'off'
+    light.bombilla_salon:
+      min_color_temp_kelvin: 1700
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 588
+      effect_list:
+      - Strobe color
+      - Police
+      - Christmas
+      - RGB
+      - Random Loop
+      - Fast Random Loop
+      - LSD
+      - Slowdown
+      - Night Mode
+      - Date Night
+      - Movie
+      - Sunrise
+      - Sunset
+      - Romance
+      - Happy Birthday
+      - Disco
+      - Strobe epilepsy!
+      - Alarm
+      - Police2
+      - WhatsApp
+      - Facebook
+      - Twitter
+      - Home
+      - Candle Flicker
+      - Slow Temp
+      - Stop
+      supported_color_modes:
+      - color_temp
+      - hs
+      - rgb
+      flowing: false
+      music_mode: false
+      friendly_name: Bombilla Salon
+      supported_features: 44
+      icon: mdi:lamp
+      state: 'off'
+  icon: mdi:television-classic
+  metadata:
+    light.bombilla_salon:
+      entity_only: true
