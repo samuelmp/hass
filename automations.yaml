@@ -7,22 +7,38 @@
     domain: media_player
     entity_id: media_player.television
     type: turned_on
-  condition:
-  - condition: sun
-    before: sunrise
-    after: sunset
+  condition: []
   action:
-  - type: turn_on
-    device_id: 247c74391203fa852830509086051beb
-    entity_id: light.bombilla_salon
-    domain: light
-    brightness_pct: 90
-    flash: long
-  - type: turn_on
-    device_id: 848c02320a43459fe3f4a094803baffb
-    entity_id: light.luz_tele
-    domain: light
-    brightness_pct: 100
+  - if:
+    - condition: sun
+      before: sunrise
+      after: sunset
+    then:
+    - type: turn_on
+      device_id: 247c74391203fa852830509086051beb
+      entity_id: light.bombilla_salon
+      domain: light
+    - type: turn_on
+      device_id: 848c02320a43459fe3f4a094803baffb
+      entity_id: light.luz_tele
+      domain: light
+      brightness_pct: 100
+  - service: remote.send_command
+    data:
+      command: power_on
+      device: amplificador
+      num_repeats: 2
+      delay_secs: 1
+    target:
+      entity_id: remote.broadlink_remote_hub
+  - service: remote.send_command
+    data:
+      command: CD-R
+      device: amplificador
+      delay_secs: 2
+      num_repeats: 2
+    target:
+      entity_id: remote.broadlink_remote_hub
   mode: single
 - id: '1673351355869'
   alias: Apagar Cine
@@ -43,6 +59,12 @@
     device_id: 848c02320a43459fe3f4a094803baffb
     entity_id: light.luz_tele
     domain: light
+  - service: remote.send_command
+    data:
+      command: power_off
+      device: amplificador
+    target:
+      entity_id: remote.broadlink_remote_hub
   mode: single
 - id: '1673456675256'
   alias: Aspirar cocina
