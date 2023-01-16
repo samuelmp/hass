@@ -14,6 +14,10 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
+#input_boolean: !include input_booleans.yaml
+#binary_sensor: !include binary_sensors.yaml
+#sensor: !include sensors.yaml
+
 vacuum:
   - platform: xiaomi_miio
     host: !secret xiaomi_vacuum_ip
@@ -35,6 +39,16 @@ sensor:
       - type: disk_use_percent
       - type: memory_use_percent
       - type: load_1m
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'date_time_utc'
+      - 'date_time_iso'
+      - 'time_date'
+      - 'time_utc'
+      - 'beat'
 
 device_tracker:
   - platform: arpscan_tracker
@@ -48,3 +62,18 @@ logger:
   default: info
   logs:
     custom_components.arpscan_tracker: debug
+    
+template:
+  - binary_sensor:
+    - name: People home
+      state: >
+        {{ is_state('person.samuelmp', 'home')
+        or is_state('person.paloma', 'home') }}
+      device_class: "presence"
+      icon: >
+        {% if is_state('person.samuelmp', 'home') or is_state('person.paloma', 'home')  %}
+          mdi:home-assistant
+        {% else %}
+          mdi:home-off
+        {% endif %}
+  
