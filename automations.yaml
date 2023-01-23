@@ -107,3 +107,19 @@
     entity_id: light.bombilla_salon
     domain: light
   mode: single
+- id: '1674297151052'
+  alias: Escritorio pekes
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 0976c25dfffbf93553597e13be940ebb
+    entity_id: binary_sensor.boton_pekes
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: toggle
+    device_id: 31c92efdcfabc776b8f6daf25a4e7553
+    entity_id: switch.enchufe_pekes_outlet
+    domain: switch
+  mode: single
