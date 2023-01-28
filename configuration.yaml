@@ -92,5 +92,13 @@ template:
   - sensor:
       - name: Consumo enchufe ordenadores
         unit_of_measurement: "W"
-        state: "{{ state_attr('switch.enchufe_ordenadores', 'load_power') | float }}"
+        state: "{{ state_attr('switch.enchufe_ordenadores', 'load_power') | float | round(2, default = 0.00) }}"
+  - sensor:
+      - name: Consumo enchufe cocina
+        unit_of_measurement: "W"
+        state: "{{ state_attr('switch.enchufe_cocina_local', 'current_consumption') | float | round(2, default = 0.00) }}"
+  - sensor:
+      - name: Consumo regleta comedor
+        unit_of_measurement: "W"
+        state: "{{ state_attr('switch.super_regleta', 'load_power') | float | round(2, default = 0.00) }}"
 
