@@ -1,0 +1,12 @@
+- binary_sensor:
+  - name: People home
+    state: >
+      {{ is_state('person.samuelmp', 'home')
+      or is_state('person.paloma', 'home') }}
+    device_class: "presence"
+    icon: >
+      {% if is_state('person.samuelmp', 'home') or is_state('person.paloma', 'home')  %}
+        mdi:home-assistant
+      {% else %}
+        mdi:home-off
+      {% endif %}

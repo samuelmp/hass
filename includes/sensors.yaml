@@ -1,0 +1,15 @@
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+    - type: memory_use_percent
+    - type: load_1m
+- platform: time_date
+  display_options:
+    - 'time'
+    - 'date'
+    - 'date_time'
+    - 'date_time_utc'
+    - 'date_time_iso'
+    - 'time_date'
+    - 'time_utc'
+    - 'beat'

@@ -1,0 +1,7 @@
+- trigger:
+  - platform: event
+    event_type: state_changed
+  sensor:
+    - name: Lights On
+      state: >
+        {{ states.light | list | selectattr('state', 'eq', 'on') | list | count }}
