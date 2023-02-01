@@ -1,0 +1,21 @@
+template:
+  - binary_sensor:
+    - name: People home
+      state: >
+        {{ is_state('person.samuelmp', 'home')
+        or is_state('person.paloma', 'home') }}
+      device_class: "presence"
+      icon: >
+        {% if is_state('person.samuelmp', 'home') or is_state('person.paloma', 'home')  %}
+          mdi:weather-sunset-up
+        {% else %}
+          mdi:weather-sunset-down
+        {% endif %}
+        
+# Example configuration.yaml entry
+binary_sensor:
+  - platform: template
+    sensors:
+      people_home:
+        friendly_name: "People home"
+        value_template: {{ state_attr('sun.sun', 'elevation') > 0 }}
