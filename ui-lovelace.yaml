@@ -100,7 +100,7 @@ views:
 
       #################################################
       #                                               #
-      #                  VARDAGSRUM                   #
+      #                  COMEDOR                      #
       #                                               #
       #################################################
 
@@ -142,6 +142,17 @@ views:
             template:
               - base
               - icon_tv
+              - loader
+          
+          # AIRE COMEDOR
+          - type: custom:button-card
+            entity: climate.daikin_comedor
+            name: "Aire Acondicionado"
+            double_tap_action:
+              !include popup/studio_flakt.yaml
+            template:
+              - base
+              - icon_fan2
               - loader
 
           - type: custom:button-card

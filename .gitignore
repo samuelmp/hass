@@ -7,6 +7,10 @@
 !*.md
 !includes/
 !includes/*
+!popup/
+!popup/*
+!www/
+!www/*
 
 # Ignore folders.
 .storage
