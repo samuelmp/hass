@@ -123,6 +123,7 @@ lovelace:
       { url: '/local/bar-card.js',                                                  type: module },
       { url: '/local/more-info-card.js',                                            type: module },
       { url: '/local/digital-clock.js',                                             type: module },
+      { url: '/local/hourly-weather/hourly-weather.js',                             type: module },
       
       { url: '/local/fonts.css?v=2.1',                                              type: css }
     ]

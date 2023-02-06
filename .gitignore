@@ -11,6 +11,8 @@
 !popup/*
 !www/
 !www/*
+!button_card_templates/
+!button_card_templates/*
 
 # Ignore folders.
 .storage

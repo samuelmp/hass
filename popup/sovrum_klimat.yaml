@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Klimat
+    title: Termostato NEST
     card_mod:
       style:
         #popup header
@@ -62,13 +62,12 @@ browser_mod:
                 entities:
 
                   - type: custom:mushroom-climate-card
-                    entity: climate.ac
-                    name: Klimat
+                    entity: climate.nest
+                    name: Termostato NEST
                     icon: mdi:home-thermometer
                     hvac_modes:
                       - 'off'
-                      - cool
-                      - fan_only
+                      - heat
                     primary_info: name
                     secondary_info: state
                     show_temperature_control: false
@@ -79,7 +78,7 @@ browser_mod:
                         }
 
                   - type: custom:mushroom-climate-card
-                    entity: climate.ac
+                    entity: climate.nest
                     icon_type: none
                     secondary_info: none
                     primary_info: none
@@ -90,49 +89,60 @@ browser_mod:
                           margin: -18px -13px -8px -4px
                         }
 
-                  - type: custom:hui-horizontal-stack-card
-                    title: Fläktläge
-                    cards:
-
-                      - type: custom:button-card
-                        entity: climate.ac
-                        name: Låg
-                        variables:
-                          fan_mode: low
-                        template:
-                          - climate_fan_mode
-
-                      - type: custom:button-card
-                        entity: climate.ac
-                        name: Med
-                        variables:
-                          fan_mode: medium
-                        template:
-                          - climate_fan_mode
-
-                      - type: custom:button-card
-                        entity: climate.ac
-                        name: Hög
-                        variables:
-                          fan_mode: high
-                        template:
-                          - climate_fan_mode
-
-                      - type: custom:button-card
-                        entity: climate.ac
-                        name: Svep
-                        template:
-                          - climate_swing_mode
-
-                  - entity: sensor.broadlink_temperature
-                    name: Rumstemperatur
-                  - entity: sensor.broadlink_humidity
-                    name: Luftfuktighet
-
+              - type: grid
+                square: false
+                columns: 2
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: sensor.nest_temperature
+                    primary: >-
+                      {{ states(entity) }} {{ state_attr(entity,
+                      "unit_of_measurement") }}
+                    secondary: Interior
+                    icon_color: |-
+                      {% set temp = states(entity) %}
+                      {% if temp >= '19' %}
+                        red
+                      {% elif temp >= '17' and temp < '19' %}
+                        orange
+                      {% elif temp == 'unknown' %}
+                        grey
+                      {% else %}
+                        blue
+                      {% endif %}
+                    icon: mdi:home-thermometer-outline
+                    card_mod:
+                      style: |
+                        ha-card {
+                          padding-left: 32px !important
+                        }
+                  - type: custom:mushroom-template-card
+                    entity: sensor.aemet_temperature
+                    primary: >-
+                      {{ states(entity) }} {{ state_attr(entity,
+                      "unit_of_measurement") }}
+                    secondary: Exterior
+                    icon_color: |-
+                      {% set temp = states(entity) %}
+                      {% if (temp | int > 21) %}
+                        red
+                      {% elif temp | int >= 14 and temp | int < 21 %}
+                        orange
+                      {% elif temp == 'unknown' %}
+                        grey
+                      {% else %}
+                        blue
+                      {% endif %}
+                    icon: mdi:thermometer
+                    card_mod:
+                      style: |
+                        ha-card {
+                          padding-right: 32px !important
+                        }
               - type: custom:apexcharts-card
                 layout: minimal
-                locale: se
-                graph_span: 8h
+                locale: es
+                graph_span: 48h
                 show:
                   loading: false
                 apex_config:
@@ -153,27 +163,36 @@ browser_mod:
                         - 99
                         - 100
                   stroke:
-                    width: 4
+                    width: 3
+                    curve: smooth
                   tooltip:
                     style:
                       fontSize: 14px
                     x:
                       format: dddd HH:mm
                   chart:
-                    height: 100px
-                    offsetY: -20px
+                    height: 160px
+                    offsetY: -10px
                   xaxis:
                     crosshairs:
                       show: false
                 series:
-                  - entity: sensor.broadlink_temperature
-                    name: Temp
-                    color: '#385581'
+                  - entity: sensor.nest_temperature
+                    name: Temperatura
+                    color: '#fa5823'
                     type: area
                     fill_raw: last
                     group_by:
                       func: avg
-                      duration: 1h
+                      duration: 2h
+                  - entity: sensor.nest_humidity
+                    name: Humedad
+                    color: '#418CFF'
+                    type: area
+                    fill_raw: last
+                    group_by:
+                      func: avg
+                      duration: 2h
           attributes:
             label: AC
         - card:

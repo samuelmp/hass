@@ -64,33 +64,51 @@ browser_mod:
 
             - entity: vacuum.aspirador
             - entity: sensor.aspirador_last_clean_end
-
+              name: Última limpieza
             - type: custom:bar-card
               width: 55%
               height: 2em
               decimal: 0
-              unit_of_measurement: '%'
+              unit_of_measurement: 's'
               positions:
                 icon: outside
                 indicator: 'off'
                 name: outside
               severity:
                 - color: '#303435'
-                  from: 11
-                  to: 999
+                  from: 120001
+                  to: 10000000
                 - color: '#6d2525'
-                  from: 0
-                  to: 10
+                  from: -10000000
+                  to: 120000
               entity_row: true
+              min: 0
+              max: 1000000
+              limit_value: true
               entities:
                 - entity: vacuum.aspirador
                   attribute: battery_level
-                  name: Batteri
+                  unit_of_measurement: '%'
+                  name: Batería
                   icon: mdi:battery
-                - entity: sensor.template_vacuum_filter
-                - entity: sensor.template_vacuum_mainbrush
-                - entity: sensor.template_vacuum_sidebrush
-                - entity: sensor.template_vacuum_sensors
+                  min: 0
+                  max: 100
+                  severity:
+                    - color: '#303435'
+                      from: 11
+                      to: 999
+                    - color: '#6d2525'
+                      from: 0
+                      to: 10
+                - entity: sensor.aspirador_filter_left
+                  name: Filtro de aire
+                - entity: sensor.aspirador_main_brush_left
+                  name: Cepillo principal
+                - entity: sensor.aspirador_side_brush_left
+                  name: Cepillo lateral
+                - entity: sensor.aspirador_sensor_dirty_left
+                  name: Sensores
+                  
 
             - type: custom:more-info-card
               entity: vacuum.aspirador
@@ -217,7 +235,7 @@ browser_mod:
                 color: #9da0a2 !important;
                 padding: 0.42em;
               }
-          language: sv
+          language: es
           entity: vacuum.aspirador
           map_source:
             camera: camera.vacuum_map
