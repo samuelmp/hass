@@ -158,6 +158,15 @@ extra_styles:
           font-size: var(--button-card-font-size);
           font-weight: var(--button-card-font-weight);
           letter-spacing: var(--button-card-letter-spacing);
+          text-overflow: unset;
+          background-image: linear-gradient(to right, var(--paper-item-icon-color) 0%, var(--paper-item-icon-color) 80%, rgba(0,0,0,0));
+          -webkit-text-fill-color: transparent;
+          -webkit-background-clip: text;
+          position: relative;
+          display: inline-block;
+          width: 100%;
+          align-content: start;
+          text-align: start;
         }
 
         /* portrait */
@@ -182,11 +191,13 @@ extra_styles:
           * * * * * * * * * * * * * * * * * */
 
             #name {
-              font-size: calc(var(--button-card-font-size) - (var(--z-axis-adjustment) * 3));
+              font-size: calc(var(--button-card-font-size) - (var(--z-axis-adjustment) * 2));
             }
             #state {
-              font-size: calc(var(--button-card-font-size) - (var(--z-axis-adjustment) * 6));
+              font-size: calc(var(--button-card-font-size) - (var(--z-axis-adjustment) * 4));
             }
+
+
 
             /* portrait */
             @media screen and (max-width: 1200px) {
@@ -219,7 +230,7 @@ extra_styles:
             }
 
             #card {
-              padding: 12% 11% 10.5% 12%;
+              padding: 10% 8%;
               transform-style: preserve-3d;
               overflow: visible;
               /* firefox pixelated edges */
@@ -318,6 +329,7 @@ extra_styles:
           #card {
             border-radius: var(--footer-card-border-radius);
             background: rgba(115, 115, 115, 0.10);
+            padding-left: var(--footer-card-padding-w)
           }
 
           #notify {

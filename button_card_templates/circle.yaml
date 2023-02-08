@@ -9,7 +9,7 @@ circle:
       - --c-stroke-width-dragging: 4
       - --c-font-color: '#97989c'
       - --c-font-size: 14px
-      - --c-unit-font-size: 10.5px
+      - --c-unit-font-size: 14px
       - --c-font-weight: 700
       - --c-letter-spacing: -0.02rem
     custom_fields:
@@ -22,6 +22,7 @@ circle:
   custom_fields:
     circle: >
       [[[
+        
         if (entity) {
             let r = 22.1,
                 c = r * 2 * Math.PI,
@@ -182,7 +183,7 @@ circle:
             *                                 *
             * * * * * * * * * * * * * * * * * */
 
-            else if (domain === 'climate') {
+            else if (domain === 'climate' || domain === 'sensor') {
                 return circle(state, input, unit);
             }
 

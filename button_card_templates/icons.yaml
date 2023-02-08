@@ -991,7 +991,7 @@ icon_socket:
                   animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
                 }
                 0% {
-                  transform: scale(0.3);
+                  transform: scale(0.6);
                 }
                 20% {
                   transform: scale(1.1);
@@ -1010,7 +1010,7 @@ icon_socket:
                 }
               }
               .on {
-                animation: on 1s;
+                animation: on 500ms;
                 transform-origin: center;
               }
             </style>
@@ -1019,6 +1019,20 @@ icon_socket:
         `;
       ]]]
 
+icon_temperature:
+  styles:
+    card:
+      - transition: all 0.3s ease-out
+    custom_fields:
+      icon:
+        - width: 75%
+        - margin-left: -10%
+        - margin-top: -2%
+        - fill: >
+            [[[ return variables.state > 30 ? '#dc7500' : (variables.state > 20 ? 'palegreen' : 'cyan'); ]]]
+  custom_fields:
+    icon: >
+      <ha-icon icon="ios:thermometer" style="color: #9da0a2;"></ha-icon>
 
 
 

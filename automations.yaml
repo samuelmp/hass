@@ -123,3 +123,34 @@
     entity_id: switch.enchufe_pekes_outlet
     domain: switch
   mode: single
+- id: '1675873146590'
+  alias: tv_on_lights
+  description: tv_on_lights
+  trigger: []
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele
+    domain: light
+  - type: turn_on
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
+    flash: long
+  mode: single
+- id: '1675873191214'
+  alias: tv_off_lights
+  description: tv_off_lights
+  trigger: []
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele
+    domain: light
+  - type: turn_off
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
+  mode: single

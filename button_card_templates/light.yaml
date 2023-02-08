@@ -46,7 +46,7 @@ light:
                           "collapsible_controls": true
                       });
                   }
-                  return lights;
+                  return  ;
               }
             ]]]
   variables:

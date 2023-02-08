@@ -1,0 +1,92 @@
+temperature:
+  template:
+    - base
+    - icon_temperature
+  show_name: true # Hides Card Name
+  show_state: true # Hides Card state
+  tap_action: 
+    action: block
+  hold_action: 
+    action: none
+  state_display: >
+    [[[ return '&nbsp;'; ]]]
+  custom_fields:
+    circle: >
+      [[[ {
+        const temperature = Math.round(entity.state);
+        
+        const secondary_entity = this?._config?.custom_fields?.graph?.card?.entities[0]?.entity || false;
+        let secondary_value = "";
+        let secondary_unit = "";
+        if(secondary_entity && states[secondary_entity]) {
+          states[secondary_entity].state && (secondary_value = Math.round(states[secondary_entity].state));
+          secondary_unit = states[secondary_entity].attributes?.unit_of_measurement ?? "";
+        }
+
+        const secondary_html = secondary_value ?
+         `<text x="60%" y="60%" fill="#8d8e90AA" font-size="14" font-weight="bold" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle" dominant-baseline="middle">
+            ${secondary_value} ${secondary_unit}
+          </text>` :
+          "";
+
+        return `<svg viewBox="0 0 50 50">
+          <text x="50%" y="20%" fill="#8d8e90" font-size="18" font-weight="bold" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle" dominant-baseline="middle">${temperature}°C</text>
+          ${secondary_html}
+          </svg>`;
+      } ]]]
+    graph:
+      card:
+        type: "custom:mini-graph-card"
+        height: 120
+        hours_to_show: 24
+        line_width: 8
+        font_size: 75
+        decimals: 0
+        animate: true
+        smoothing: true
+        points_per_hour: 1
+        average: true
+        tap_action: 
+          action: none
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          labels: false
+          labels_secondary: false
+          points: false
+        color_thresholds:
+          - value: 0
+            color: "#276696"
+          - value: 17
+            color: "#228C22"
+          - value: 21
+            color: "#d35400"
+          - value: 28
+            color: "#c0392b"
+#      push_graph: >
+#        [[[
+#          setTimeout(() => {
+#            let elt = this.shadowRoot,
+#              card = elt.getElementById('card'),
+#              container = elt.getElementById('container'),
+#              graph = elt.getElementById('graph');
+#            if (elt && card && container && graph) {
+#              card.insertBefore(graph, container);
+#            }
+#          }, 0);
+#          return null;
+#        ]]]
+  styles:
+    custom_fields:
+      graph: [opacity: .6, bottom: -11%, left: -8%, width: 115%, position: absolute, margin: 0, --ha-card-border-width: 0, --ha-card-border-radius: 14px]
+      icon:
+        - width: 67%
+        - fill: "#9da0a2"
+      circle:
+        - display: initial
+        - width: 90%
+        - margin: 2% 0 0 0
+        - justify-self: end
+        - opacity: 1
