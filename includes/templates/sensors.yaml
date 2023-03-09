@@ -1,17 +1,20 @@
 - sensor:
     - name: Consumo enchufe ordenadores
       unit_of_measurement: "W"
-      state: "{{ state_attr('switch.enchufe_ordenadores', 'load_power') | float | round(2, default = 0.00) }}"
+      state: "{{ state_attr('switch.enchufe_ordenadores', 'load_power') | float(default = 0.00) | round(2, default = 0.00) }}"
 - sensor:
     - name: Consumo enchufe cocina
       unit_of_measurement: "W"
       state: >
         {% if is_state('switch.enchufe_cocina_local', 'on') or is_state('switch.enchufe_cocina_local', 'off')  %}
-          {{ state_attr('switch.enchufe_cocina_local', 'current_consumption') | is_number | float | round(2, default = 0.00) }}
+          {{ state_attr('switch.enchufe_cocina_local', 'current_consumption') | is_number | float(default = 0.00) | round(2, default = 0.00) }}
         {% else %}
-          {{ 0 | float | round(2, default = 0) }}
+          {{ 0 | float(default = 0.00) | round(2, default = 0) }}
         {% endif %}
 - sensor:
     - name: Consumo regleta comedor
       unit_of_measurement: "W"
-      state: "{{ state_attr('switch.super_regleta', 'load_power') | float | round(2, default = 0.00) }}"
+      state: "{{ state_attr('switch.super_regleta', 'load_power') | float(default = 0.00) | round(2, default = 0.00) }}"
+- sensor:
+  - name: Estado Termostato NEST 
+    state: "{{ state_attr('climate.nest', 'hvac_action') }}"

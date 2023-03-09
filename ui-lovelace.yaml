@@ -1,6 +1,11 @@
-button_card_templates:
-  !include_dir_merge_named button_card_templates
-
+button_card_templates: !include_dir_merge_named button_card_templates
+decluttering_templates: !include includes/decluttering_templates.yaml
+kiosk_mode:
+  user_settings:
+    - users:
+        - "Tablet"
+      hide_header: true
+      hide_sidebar: true
 views:
   - type: custom:grid-layout
     title: Home
@@ -42,7 +47,6 @@ views:
             "sidebar  footer      footer  ."
             "sidebar  .           .       ."
     cards:
-
       #extra_styles fix, do not remove
       #also warn if theme is not set
 
@@ -68,7 +72,6 @@ views:
             - font-weight: bolder
             - font-size: xxx-large
             - background: yellow
-
       #################################################
       #                                               #
       #                    SIDEBAR                    #
@@ -79,7 +82,6 @@ views:
         view_layout:
           grid-area: sidebar
         cards:
-
           - type: custom:button-card
             entity: sensor.template_sidebar
             template: sidebar
@@ -87,7 +89,7 @@ views:
           - type: conditional
             conditions:
               - entity: input_boolean.laundry_display
-                state: 'on'
+                state: "on"
             card:
               type: custom:button-card
               entity: timer.laundry
@@ -97,8 +99,6 @@ views:
                 service_data:
                   entity_id: input_boolean.laundry_display
               template: laundry
-
-
 
       #################################################
       #                                               #
@@ -112,45 +112,58 @@ views:
           grid-area: vardagsrum
         columns: 2
         cards:
-          - type: custom:button-card
-            entity: climate.nest
-            name: Termostato
-            double_tap_action:
-              !include popup/sovrum_klimat.yaml
+          # - type: custom:button-card
+          #   entity: climate.nest
+          #   name: Termostato
+          #   double_tap_action: !include popup/sovrum_klimat.yaml
+          #   template:
+          #     - base
+          #     - icon_climate
+          #     - circle
+          #     - graph
+          #   variables:
+          #     circle_input: >
+          #       [[[
+          #         if (entity) {
+          #             return entity.state === 'heat'
+          #                 ? Math.round(entity.attributes.temperature).toString()
+          #                 : Math.round(entity.attributes.current_temperature).toString();
+          #         }
+          #       ]]]
+          #     circle_input_unit: "°C"
+          #   custom_fields:
+          #     graph:
+          #       card:
+          #         entities:
+          #           - entity: sensor.nest_humidity
+          #             color: "#4a7aeb"
+          #             y_axis: secondary
+          #           - entity: sensor.nest_temperature
 
-            template:
-              - base
-              - icon_climate
-              - circle
-            variables:
-              circle_input: >
-                [[[
-                  if (entity) {
-                      return entity.state === 'heat'
-                          ? Math.round(entity.attributes.temperature).toString()
-                          : Math.round(entity.attributes.current_temperature).toString();
-                  }
-                ]]]
-              circle_input_unit: '°C'
-        # AIRE COMEDOR
+          # AIRE COMEDOR
           - type: custom:button-card
             entity: climate.daikin_comedor
             name: "A/C"
-
-            double_tap_action:
-              !include popup/studio_flakt.yaml
+            double_tap_action: !include popup/studio_flakt.yaml
             template:
               - base
               - icon_fan2
               - loader
+          # - type: custom:button-card
+          #   entity: light.luz_tele_2
+          #   template:
+          #     - light
+          #     - icon_hue
+          # - type: custom:button-card
+          #   entity: light.bombilla_salon
+          #   name: Lampara
+          #   template:
+          #     - light
+          #     - icon_shade
+
           - type: custom:button-card
-            entity: light.luz_tele
-            template:
-              - light
-              - icon_hue
-          - type: custom:button-card
-            entity: light.bombilla_salon
-            name: Lampara
+            entity: light.luces_comedor
+            name: Luces
             template:
               - light
               - icon_shade
@@ -166,48 +179,54 @@ views:
                     return variables.translate_unknown;
                 }
               ]]]
-            double_tap_action:
-              !include popup/vardagsrum_tv.yaml
+
+            double_tap_action: !include popup/vardagsrum_tv.yaml
             template:
               - base
               - icon_tv
               - loader
+          - type: custom:button-card
+            entity: switch.super_regleta
+            name: Regleta
+            template:
+              - socket
+            variables:
+              power_entity: sensor.consumo_regleta_comedor
+              title: Super regleta
+
+            hold_action:
+              action: block
+              ui_sound_tablet: undefined
+              card_bounce: undefined
 
       #################################################
       #                                               #
       #                  ORDENADORES                  #
       #                                               #
       #################################################
-
       - type: grid
         title: Ordenadores
         view_layout:
           grid-area: studio
         columns: 2
         cards:
-        # Sensor temperatura ordenadores
+          # Sensor temperatura ordenadores
           - type: custom:button-card
             template:
               - temperature
-            
             entity: sensor.daikin_ordenador_inside_temperature
-            name: Temperatura
-            custom_fields:
-              graph:
-                card:
-                  entities:
-                    - entity: sensor.humidity_158d000171f1b3
-                      color: '#4a7aeb'
-                      y_axis: secondary
-                    - entity: sensor.daikin_ordenador_inside_temperature
-                      #color: '#fc9800'
-                      
-        # Aire ordenadores
+            name: "&nbsp;"
+            variables:
+              temperature_sensor: sensor.daikin_ordenador_inside_temperature
+              humidity_sensor: sensor.humidity_158d000171f1b3
+              title: Temperatura ordenadores
+              popup_icon: mdi:desk
+
+          # Aire ordenadores
           - type: custom:button-card
             entity: climate.daikin_ordenador
             name: "A/C"
-            double_tap_action:
-              !include popup/studio_flakt.yaml
+            double_tap_action: !include popup/studio_flakt.yaml
             template:
               - base
               - icon_fan2
@@ -221,22 +240,11 @@ views:
           - type: custom:button-card
             entity: switch.enchufe_ordenadores
             name: Escritorio
-            double_tap_action:
-              !include popup/studio_monitorer.yaml
             template:
-              - base
-              - icon_socket
-              - circle
-              - loader
+              - socket
             variables:
-              circle_input: >
-                [[[
-                  let consumo = states['sensor.consumo_enchufe_ordenadores'];
-                  if (consumo) return parseInt(consumo.state);
-                ]]]
-              circle_input_unit: 'W'
-
-    
+              power_entity: sensor.consumo_enchufe_ordenadores
+              title: Enchufe ordenadores
       #################################################
       #                                               #
       #                    COCINA                     #
@@ -253,16 +261,12 @@ views:
             template:
               - temperature
             entity: sensor.ble_temperature_temperatura_cocina
-            name: Temperatura
-            custom_fields:
-              graph:
-                card:
-                  entities:
-                    - entity: sensor.ble_humidity_temperatura_cocina
-                      color: '#4a7aeb'
-                      y_axis: secondary
-                    - entity: sensor.ble_temperature_temperatura_cocina
-                      #color: '#fc9800'
+            name: "&nbsp;"
+            variables:
+              temperature_sensor: sensor.ble_temperature_temperatura_cocina
+              humidity_sensor: sensor.ble_humidity_temperatura_cocina
+              title: Temperatura cocina
+              popup_icon: mdi:silverware-fork-knife
           - type: custom:button-card
             entity: light.tira_led_cocina
             name: Tira Led
@@ -272,23 +276,12 @@ views:
           - type: custom:button-card
             entity: switch.enchufe_cocina_socket_1
             name: Enchufe
-            double_tap_action:
-              !include popup/studio_monitorer.yaml
             template:
-              - base
-              - icon_socket
-              - circle
-              - loader
+              - socket
             variables:
-              circle_input: >
-                [[[
-                  let consumo = states['sensor.consumo_enchufe_cocina'];
-                  if (consumo) return parseInt(consumo.state);
-                ]]]
-              circle_input_unit: 'W'
-                  # Sensor temperatura ordenadores
+              power_entity: sensor.consumo_enchufe_cocina
+              title: Enchufe cocina
 
-      
       #################################################
       #                                               #
       #                     MEDIA                     #
@@ -301,39 +294,60 @@ views:
           grid-area: media
         columns: 1
         cards:
-
           - type: custom:swipe-card
             parameters:
               speed: 550
               spaceBetween: 40
               threshold: 5
             cards:
-
               - type: horizontal-stack
                 cards:
-
                   - type: conditional
                     conditions:
                       - entity: select.conditional_media
                         state_not: Vardagsrum
-
                       - entity: select.conditional_media
                         state_not: Sovrum
-
                       - entity: select.conditional_media
                         state_not: Spotify
-
                       - entity: select.conditional_media
                         state_not: Kök
                     card:
-                      type: custom:button-card
-                      entity: sensor.plex_recently_added
-                      name: Senast tillagt
-                      tap_action:
-                        action: none
-                      template:
-                        - conditional_media
-                        - icon_plex
+                      # type: custom:button-card
+                      # entity: sensor.plex_recently_added
+                      # name: Última incorporación
+                      # tap_action:
+                      #   action: none
+                      # template:
+                      #   - conditional_media
+                      #   - icon_plex
+
+                      # type: custom:button-card
+                      # entity: media_player.spotify_samuelmp
+                      # name: >
+                      #   [[[ return entity.attributes.media_artist; ]]]
+                      # state_display: >
+                      #   [[[ return entity.attributes.media_title; ]]]
+                      # template:
+                      #   - conditional_media
+                      #   - icon_spotify
+
+                      type: custom:thermostat-card
+                      entity: climate.nest
+                      title: NEST
+                      card_mod:
+                        style: |
+                          .dial {
+                              user-select: none;
+                              --thermostat-off-fill: #3267d3c2;
+                              --thermostat-path-color: rgba(255, 255, 255, 0.3);
+                              --thermostat-path-active-color: rgba(255, 255, 255, 0.8);
+                              --thermostat-path-active-color-large: rgba(255, 255, 255, 1);
+                              --thermostat-text-color: white;
+                          }
+                          ha-card {
+                            background: rgba(0, 0, 0, 0.0);
+                          }
 
                   - type: conditional
                     conditions:
@@ -384,7 +398,6 @@ views:
               - type: grid
                 columns: 2
                 cards:
-
                   - type: custom:button-card
                     entity: media_player.vardagsrum
                     triggers_update: sensor.youtube_watching
@@ -420,7 +433,6 @@ views:
       #                    PEKES                      #
       #                                               #
       #################################################
-
       - type: grid
         title: Pekes
         view_layout:
@@ -431,15 +443,12 @@ views:
             template:
               - temperature
             entity: sensor.temperature_158d0002018651
-            name: Temperatura
-            custom_fields:
-              graph:
-                card:
-                  entities:
-                    - entity: sensor.humidity_158d0002018651
-                      color: '#4a7aeb'
-                      y_axis: secondary
-                    - entity: sensor.temperature_158d0002018651
+            name: "&nbsp;"
+            variables:
+              temperature_sensor: sensor.temperature_158d0002018651
+              humidity_sensor: sensor.humidity_158d0002018651
+              title: Temperatura pekes
+              popup_icon: mdi:toy-brick-outline
           - type: custom:button-card
             entity: light.bombilla_pekes
             name: Lampara
@@ -449,50 +458,41 @@ views:
           - type: custom:button-card
             entity: switch.enchufe_pekes_outlet
             name: Escritorio
-            double_tap_action:
-              !include popup/studio_monitorer.yaml
             template:
-              - base
-              - icon_socket
-              - circle
-              - loader
+              - socket
             variables:
-              circle_input: >
-                [[[
-                  let consumo = states['sensor.enchufe_pekes_power'];
-                  if (consumo) return parseInt(consumo.state);
-                ]]]
-              circle_input_unit: 'W'
-#          - type: custom:button-card
-#            entity: light.badrum_group
-#            name: Badrum
-#            template:
-#              - light
-#              - icon_bathroom
+              power_entity: sensor.enchufe_pekes_power
+              title: Enchufe pekes
+      #          - type: custom:button-card
+      #            entity: light.badrum_group
+      #            name: Badrum
+      #            template:
+      #              - light
+      #              - icon_bathroom
 
-#          - type: custom:button-card
-#            entity: switch.gosund_fan_switch
-#            name: "Fläkt\u00B2"
-#            double_tap_action:
-#              !include popup/studio_flakt.yaml
-#            template:
-#              - base
-#              - icon_fan2
-#              - loader
+      #          - type: custom:button-card
+      #            entity: switch.gosund_fan_switch
+      #            name: "Fläkt\u00B2"
+      #            double_tap_action:
+      #              !include popup/studio_flakt.yaml
+      #            template:
+      #              - base
+      #              - icon_fan2
+      #              - loader
 
-#          - type: custom:button-card
-#            entity: light.garderob_lampa
-#            name: Garderob
-#            template:
-#              - light
-#              - icon_closet
+      #          - type: custom:button-card
+      #            entity: light.garderob_lampa
+      #            name: Garderob
+      #            template:
+      #              - light
+      #              - icon_closet
 
-#          - type: custom:button-card
-#            entity: light.hall_group
-#            name: Hall
-#            template:
-#              - light
-#              - icon_spot
+      #          - type: custom:button-card
+      #            entity: light.hall_group
+      #            name: Hall
+      #            template:
+      #              - light
+      #              - icon_spot
 
       #################################################
       #                                               #
@@ -510,63 +510,63 @@ views:
             template:
               - temperature
             entity: sensor.temperature_158d000171f1b3
-            name: Temperatura
-            custom_fields:
-              graph:
-                card:
-                  entities:
-                    - entity: sensor.humidity_158d000171f1b3
-                      color: '#4a7aeb'
-                      y_axis: secondary
-                    - entity: sensor.temperature_158d000171f1b3
+            name: "&nbsp;"
+            variables:
+              temperature_sensor: sensor.temperature_158d000171f1b3
+              humidity_sensor: sensor.humidity_158d000171f1b3
+              title: Temperatura entrada
+              popup_icon: mdi:lamp
+          - type: custom:button-card
+            entity: light.bombilla_entrada
+            name: Lampara
+            template:
+              - light
+              - icon_shade
           - type: custom:button-card
             entity: light.plaflon_dormitorio
-            name: Luz dormitorio
-            hold_action:
-              !include popup/vardagsrum_balkong.yaml
+            name: Plafon dormitorio
             template:
-              - base
+              - light
               - icon_spot
-              - loader
-#          - type: custom:button-card
-#            entity: person.matte
-#            name: Mattias
-#            triggers_update:
-#              - sensor.matte_last_changed
-#            double_tap_action:
-#              !include popup/hemma_mattias.yaml
-#            variables:
-#              retain: sensor.matte_last_changed
-#            template:
-#              - person
-#              - circle
+      #          - type: custom:button-card
+      #            entity: person.matte
+      #            name: Mattias
+      #            triggers_update:
+      #              - sensor.matte_last_changed
+      #            double_tap_action:
+      #              !include popup/hemma_mattias.yaml
+      #            variables:
+      #              retain: sensor.matte_last_changed
+      #            template:
+      #              - person
+      #              - circle
 
-#          - type: custom:button-card
-#            entity: person.sanja
-#            name: Sanja
-#            triggers_update:
-#              - sensor.sanja_last_changed
-#            double_tap_action:
-#              !include popup/hemma_sanja.yaml
-#            variables:
-#              retain: sensor.sanja_last_changed
-#            template:
-#              - person
-#              - circle
+      #          - type: custom:button-card
+      #            entity: person.sanja
+      #            name: Sanja
+      #            triggers_update:
+      #              - sensor.sanja_last_changed
+      #            double_tap_action:
+      #              !include popup/hemma_sanja.yaml
+      #            variables:
+      #              retain: sensor.sanja_last_changed
+      #            template:
+      #              - person
+      #              - circle
 
-#          - type: custom:button-card
-#            entity: script.home_leave
-#            name: Stäng allt
-#            template:
-#              - base
-#              - icon_away
+      #          - type: custom:button-card
+      #            entity: script.home_leave
+      #            name: Stäng allt
+      #            template:
+      #              - base
+      #              - icon_away
 
-#          - type: custom:button-card
-#            entity: script.home_arrive
-#            name: Hemma
-#            template:
-#              - base
-#              - icon_home
+      #          - type: custom:button-card
+      #            entity: script.home_arrive
+      #            name: Hemma
+      #            template:
+      #              - base
+      #              - icon_home
 
       #################################################
       #                                               #
@@ -578,12 +578,10 @@ views:
         view_layout:
           grid-area: footer
         cards:
-
           - type: custom:button-card
             name: >
-              <ha-icon icon="mdi:nas"></ha-icon> NAS
-            tap_action:
-              !include popup/footer_nas.yaml
+              <ha-icon icon="mdi:home-assistant"></ha-icon> HASS
+            tap_action: !include popup/footer_nas.yaml
             triggers_update:
               - update.nas_dsm_update
               - sensor.nas_volume_1_status
@@ -601,13 +599,11 @@ views:
                             parseFloat(states[id[3]].state) >= 85;
                 ]]]
             template: footer
-
           - type: custom:button-card
             entity: sensor.template_updates
             name: >
               <ha-icon icon="mdi:arrow-up-bold-circle-outline"></ha-icon> Uppdatera
-            tap_action:
-              !include popup/footer_updates.yaml
+            tap_action: !include popup/footer_updates.yaml
             variables:
               notify: >
                 [[[
@@ -618,8 +614,7 @@ views:
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:robot-vacuum-variant"></ha-icon> Aspirador
-            tap_action:
-              !include popup/footer_vacuum.yaml
+            tap_action: !include popup/footer_vacuum.yaml
             triggers_update:
               - sensor.date
             variables:
@@ -633,15 +628,13 @@ views:
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:chart-line-variant"></ha-icon> Historik
-            tap_action:
-              !include popup/footer_history.yaml
+            tap_action: !include popup/footer_history.yaml
             template: footer
 
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:tablet"></ha-icon> Platta
-            tap_action:
-              !include popup/footer_tablet.yaml
+            tap_action: !include popup/footer_tablet.yaml
             variables:
               notify: >
                 [[[
@@ -649,12 +642,11 @@ views:
                   if (id) return id.state === 'off';
                 ]]]
             template: footer
-        
+
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:router-wireless"></ha-icon> Router
-            tap_action:
-              !include popup/footer_router.yaml
+            tap_action: !include popup/footer_router.yaml
             triggers_update:
               - update.unifi_dream_machine
               - binary_sensor.template_udm_internet

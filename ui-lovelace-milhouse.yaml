@@ -1,0 +1,35 @@
+button_card_templates: !include includes/fulldash/button_card_templates.yaml
+
+custom_header:
+  compact_mode: true
+  editor_warnings: false
+  exceptions:
+    - conditions:
+        user_agent: Lenovo
+      config:
+        disable_sidebar: true
+        hide_header: true
+        kiosk_mode: true
+    - conditions:
+        user: tablet
+      config:
+        disable_sidebar: true
+        kiosk_mode: true
+    - conditions:
+        device_id: e98effc3-b940ce40
+      config:
+        disable_sidebar: true
+        kiosk_mode: true
+
+
+
+title: Lust & Freud
+theme: slate
+views:
+
+  - title: Control Rooms
+    icon: 'mdi:floor-plan'
+    theme: slate
+    panel: true
+    badges: []
+    cards:

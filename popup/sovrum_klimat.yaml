@@ -151,16 +151,16 @@ browser_mod:
                       fillTo: end
                   grid:
                     padding:
-                      top: -15
+                      top: -10
                   fill:
                     type: gradient
                     gradient:
                       type: vertical
-                      opacityFrom: 0.8
+                      opacityFrom: 0.7
                       opacityTo: 0
                       stops:
                         - 0
-                        - 99
+                        - 80
                         - 100
                   stroke:
                     width: 3
@@ -172,27 +172,38 @@ browser_mod:
                       format: dddd HH:mm
                   chart:
                     height: 160px
-                    offsetY: -10px
+                    offsetY: 0px
+                    stacked: false
                   xaxis:
                     crosshairs:
                       show: false
+                yaxis:
+                  - id: first # identification name of the first y-axis
+                    show: false
+                  - id: second # identification name of the second y-axis
+                    show: false
                 series:
+                  - entity: sensor.nest_humidity
+                    yaxis_id: second
+                    name: Humedad
+                    color: '#418CFF'
+                    type: area
+                    fill_raw: last
+                    min: 0
+                    max: 100
+                    group_by:
+                      func: avg
+                      duration: 2h
                   - entity: sensor.nest_temperature
                     name: Temperatura
                     color: '#fa5823'
                     type: area
                     fill_raw: last
+                    yaxis_id: first
                     group_by:
                       func: avg
                       duration: 2h
-                  - entity: sensor.nest_humidity
-                    name: Humedad
-                    color: '#418CFF'
-                    type: area
-                    fill_raw: last
-                    group_by:
-                      func: avg
-                      duration: 2h
+
           attributes:
             label: AC
         - card:

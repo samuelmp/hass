@@ -1,0 +1,55 @@
+graph:
+  custom_fields:
+    graph:
+      card:
+        type: "custom:mini-graph-card"
+        height: 120
+        hours_to_show: 24
+        hour24: true
+        line_width: 8
+        font_size: 75
+        decimals: 0
+        animate: true
+        smoothing: true
+        points_per_hour: 1
+        average: true
+        tap_action: 
+          action: none
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          labels: false
+          labels_secondary: false
+          points: false
+        card_mod:
+          style: |
+            :host {
+              height: 100%;
+            }
+        color_thresholds:
+          - value: 0
+            color: "#49b7ff"
+          - value: 17
+            color: "#fffec7"
+          - value: 21
+            color: "#fcb832"
+          - value: 28
+            color: "#fa5014"
+    push_graph: >
+      [[[
+        setTimeout(() => {
+          let elt = this.shadowRoot,
+            card = elt.getElementById('card'),
+            container = elt.getElementById('container'),
+            graph = elt.getElementById('graph');
+          if (elt && card && container && graph) {
+            card.appendChild(graph);
+          }
+        }, 0);
+        return null;
+      ]]]
+  styles:
+    custom_fields:
+      graph: [opacity: .6, top: 0, left: 0, bottom: 0, right: 0, position: absolute, margin: 0, --ha-card-border-width: 0, --ha-card-border-radius: 10%]

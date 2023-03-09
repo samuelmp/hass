@@ -332,6 +332,10 @@ extra_styles:
             padding-left: var(--footer-card-padding-w)
           }
 
+          #container {
+            display: flex !important;
+          }
+
           #notify {
             font-size: var(--footer-notify-font-size);
             width: var(--footer-notify-box-size);

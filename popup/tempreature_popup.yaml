@@ -1,0 +1,44 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: Sensor de temperatura
+    style: |
+      --popup-padding-x: 16px;
+      --popup-padding-y: 16px;
+# --popup-min-width: 800px;
+# --popup-max-width: 1000px;
+    content:
+      type: custom:mini-graph-card
+
+      align_header: left
+      align_icon: left
+      entities:
+        - entity: >
+            [[[ { 
+              return variables.temperature_sensor;
+            } ]]]
+          name: Temperatura
+        - entity: >
+            [[[ { return variables.humidity_sensor; } ]]]
+          name: Humedad
+          show_graph: true
+          show_state: true
+          y_axis: secondary
+        - color: gray
+          entity: sensor.daystate_100
+          name: Day
+          show_legend: false
+          show_line: false
+          show_points: false
+          y_axis: secondary
+      font_size: 80
+      hour24: true
+      icon: >
+        [[[ { return variables.popup_icon; } ]]]
+      name:  >
+        [[[ { return variables.title || "Sensor desconocido"; } ]]]
+      points_per_hour: 6
+      line_width: 4
+      show:
+        extrema: true

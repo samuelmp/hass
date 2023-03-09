@@ -1,0 +1,43 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: "Enchufe"
+    card_mod:
+      style:
+        #popup header
+        .:
+    content:
+      type: custom:mini-graph-card
+      align_header: left
+      align_icon: left
+      entities:
+        - entity: >
+            [[[ { return variables.power_entity; } ]]]
+          name: Consumo 
+          show_graph: true
+          show_state: true
+          color: "#4a7aeb"
+          state_adaptive_color: true
+        - color: "gray"
+          entity: sensor.daystate_100
+          name: Day
+          show_legend: false
+          show_line: false
+          show_points: false
+          y_axis: secondary
+      font_size: 80
+
+      hour24: true
+      icon: mdi:power-socket-eu
+      name:  >
+        [[[ { return `${variables.title || "Sensor desconocido"} ${!variables.state_on ? "(Apagado)" : ""}`; } ]]]
+      points_per_hour: 6
+      line_width: 4
+      show:
+        extrema: true
+        icon_adaptive_color: >
+          [[[ { return variables.state_on; } ]]]
+        name_adaptive_color: >
+          [[[ { return variables.state_on; } ]]]
+

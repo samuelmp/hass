@@ -592,7 +592,7 @@ icon_climate:
         - width: 78%
         - margin-left: -10%
         - fill: >
-            [[[ return variables.state === 'cool' || variables.state === 'heat' ? '#5daeea' : '#9da0a2'; ]]]
+            [[[ return variables.state === 'cool' || variables.state === 'heat' ? '#4a7aeb' : '#9da0a2'; ]]]
   custom_fields:
     icon: >
       <svg viewBox="0 0 50 50">
@@ -972,8 +972,10 @@ icon_socket:
       icon:
         - width: 170%
         - margin-left: -6%
+        - margin-top: -4%
         - fill: >
-            [[[ return variables.state_on ? '#90ad27' : '#9da0a2'; ]]]
+            [[[ return variables.state_on ? '#4a7aeb' : '#9da0a2'; ]]]
+          ##90ad27
   custom_fields:
     icon: >
       [[[
@@ -988,7 +990,7 @@ icon_socket:
                 60%,
                 80%,
                 to {
-                  animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                  animation-timing-function: cubic-bezier(0.215, 0.355, 1);
                 }
                 0% {
                   transform: scale(0.6);
@@ -1028,11 +1030,12 @@ icon_temperature:
         - width: 75%
         - margin-left: -10%
         - margin-top: -2%
-        - fill: >
-            [[[ return variables.state > 30 ? '#dc7500' : (variables.state > 20 ? 'palegreen' : 'cyan'); ]]]
+        # - fill: >
+        #     [[[ return variables.state > 30 ? '#dc7500' : (variables.state > 20 ? 'palegreen' : 'cyan'); ]]]
   custom_fields:
     icon: >
-      <ha-icon icon="ios:thermometer" style="color: #9da0a2;"></ha-icon>
+      <ha-icon icon="ios:thermometer#fullcolor"></ha-icon>
+# <ha-icon icon="ios:thermometer#color" style="color: #9da0a2;"></ha-icon>
 
 
 

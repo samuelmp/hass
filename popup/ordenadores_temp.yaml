@@ -1,0 +1,18 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: "Aire acondicionado"
+    card_mod:
+      style:
+        #popup header
+        .:
+    content:
+      type: custom:mushroom-climate-card
+      entity: climate.daikin_ordenador
+      icon: mdi:air-conditioner
+      collapsible_controls: false
+      hvac_modes:
+        - heat
+        - cool
+      show_temperature_control: true

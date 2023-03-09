@@ -1,8 +1,13 @@
 - platform: systemmonitor
   resources:
     - type: disk_use_percent
+      arg: /
     - type: memory_use_percent
     - type: load_1m
+    - type: processor_use
+    - type: last_boot
+  scan_interval: 120
+
 - platform: time_date
   display_options:
     - 'time'
@@ -13,3 +18,96 @@
     - 'time_date'
     - 'time_utc'
     - 'beat'
+
+- platform: template
+  sensors:
+    nightstate_100:
+      friendly_name: Night State
+      value_template: "{% if is_state('sun.sun', 'below_horizon') %}100{% else %}0{% endif %}"
+    daystate_100:
+      friendly_name: Day State
+      value_template: "{% if is_state('sun.sun', 'below_horizon') %}0{% else %}100{% endif %}"
+    
+    ## to get the current view of my tablet for UI automations
+    tablet_view:
+          value_template: "{{ states.sensor.tablet.attributes['path'] | default('/lovelace-full/0') }}"
+          friendly_name: Tablet View
+
+
+    ## Calculates daylight brightness out of 100%
+    sunlight_pct:
+      value_template: >-
+        {%- set elevation = state_attr('sun.sun','elevation') | float %}
+        {%- set cloud_coverage = states('sensor.dark_sky_cloud_coverage') | float %}
+        {%- set cloud_factor = (1 - (0.75 * ( cloud_coverage / 100) ** 3 )) %}
+        {%- set min_elevation = -6 %}
+        {%- set max_elevation = 90 %}
+        {%- set adjusted_elevation = elevation - min_elevation %}
+        {%- set adjusted_elevation = [adjusted_elevation,0] | max %}
+        {%- set adjusted_elevation = [adjusted_elevation,max_elevation - min_elevation] | min %}
+        {%- set adjusted_elevation = adjusted_elevation / (max_elevation - min_elevation) %}
+        {%- set adjusted_elevation = adjusted_elevation %}
+        {%- set adjusted_elevation = adjusted_elevation * 100 %}
+        {%- set brightness = adjusted_elevation * cloud_factor %}
+        {{ brightness | round }}
+      unit_of_measurement: '%'
+      device_class: 'illuminance'
+
+
+    ## Daylight brightness converted to opacity for CSS
+    sunlight_opacity:
+      value_template: >-
+        {%- set sunpct = states('sensor.sunlight_pct') | float %}
+        {%- set opacity = sunpct / 100 | float %}
+        {{ opacity }}
+
+
+    ## Converts time and date into sentence for UI
+    day:
+      value_template: >
+        {% set days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] %}
+        {{ days[now().weekday()] }}
+
+    month:
+      value_template: >
+        {% set months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'] %}
+        {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
+        {{ months[now().month-1] }}
+
+    date_string:
+      friendly_name: "Full Date 1"
+      value_template: "{{ states('sensor.day') }}, {{ states('sensor.month') }} {{ now().year }}"
+
+
+    ## Vaccuum templates, for showing attributes as sensors, etc.
+
+    vacuum_status:
+      friendly_name: "Vacuum - Status"
+      value_template: "{{ states.vacuum.aspirador.attributes.status }}"
+
+    vacuum_cleaning_status:
+      friendly_name: "Vacuum - Cleaning Status"
+      value_template: "Cleaning {{ states('input_text.room_cleaning') }}"
+
+    vacuum_battery:
+      friendly_name: "Vacuum - Battery"
+      value_template: "{{ states.vacuum.aspirador.attributes.battery_level }}"
+      device_class: battery
+      unit_of_measurement: '%'
+
+    vacuum_fan:
+      friendly_name: "Vacuum - Fan Speed"
+      value_template: "{{ states.vacuum.aspirador.attributes.fan_speed }}"
+
+    vacuum_battery_icon:
+      friendly_name: "Vacuum - Battery Icon"
+      icon_template: "{{ states.vacuum.aspirador.attributes.battery_icon }}"
+      value_template: "{{ states.vacuum.aspirador.attributes.battery_icon }}"
+
+    vacuum_cleaning_time:
+      friendly_name: "Vacuum - Cleaning Time"
+      value_template: "{{ states.vacuum.aspirador.attributes.cleaning_time }}"
+
+    vacuum_cleaned_area:
+      friendly_name: "Vacuum - Cleaned Area"
+      value_template: "{{ states.vacuum.aspirador.attributes.cleaned_area }}"

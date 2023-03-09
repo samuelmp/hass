@@ -1,0 +1,79 @@
+socket:
+  template:
+    - base
+    - graph
+    - icon_socket
+  show_name: true # Hides Card Name
+  show_state: true # Hides Card state
+  tap_action:
+    !include ../popup/sockets_popup.yaml
+  hold_action: 
+    action: toggle
+  double_tap_action:
+    !include ../popup/sockets_popup.yaml
+  state_display: >
+    [[[ {
+      if (variables.state_on) return '&nbsp;';
+    } ]]]
+  custom_fields:
+    circle: >
+      [[[ {
+        if (entity && variables.state_on) {
+          let input = ' ',
+              unit = variables.circle_input_unit || 'W';
+          
+          if(variables.circle_input) {
+            input = variables.circle_input;
+          } else if(variables.power_entity) {
+            let consumo = states[variables.power_entity];
+            consumo && (input = parseInt(consumo.state));
+          }
+          return `<svg viewBox="0 0 50 50">
+            <text x="50%" y="20%" fill="#8d8e90" font-size="18" font-weight="bold" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle" dominant-baseline="middle">${input}${unit}</text>
+            </svg>`;
+        }
+      } ]]]
+    graph:
+      card:
+        height: 140
+        points_per_hour: 6
+        entities:
+          - entity: sensor.daystate_100
+            color: grey
+            name: Day
+            show_legend: false
+            show_line: false
+            show_points: false
+            y_axis: secondary
+          # - entity: binary_sensor.day
+          #   color: >
+          #     [[[ {
+          #       return variables.state_on ? 'rgba(0,0,0,1)' : 'rgba(255,255,255,.9)';
+          #     } ]]] 
+          #   y_axis: secondary
+          #   aggregate_func: min
+          #   show_state: true
+          #   show_line: false
+          #   show_points: false
+          - entity: >
+              [[[ { return variables.power_entity; } ]]]
+            color: '#4a7aeb'
+            
+        state_map:
+          - value: "off"
+            label: "Day"
+          - value: "on"
+            label: "Night"
+  styles:
+    custom_fields:
+      graph: 
+        - opacity: >
+            [[[ { return variables.state_on ? .6 : .3; } ]]]
+      circle:
+        - display: initial
+        - width: 90%
+        - margin: 0 0 0 0
+        - justify-self: end
+        - opacity: 1
+        - color: "#4a7aeb"
+      
