@@ -1,0 +1,4 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data: !include footer_weather_data.yaml

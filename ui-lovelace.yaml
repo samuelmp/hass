@@ -12,6 +12,7 @@ views:
     layout:
       #default
       margin: 0
+      height: 100vh
       grid-gap: var(--custom-layout-card-padding)
       grid-template-columns: repeat(4, 1fr) 0
       grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
@@ -20,6 +21,7 @@ views:
         "sidebar  vardagsrum  studio  sovrum  ."
         "sidebar  media       övrigt  hemma   ."
         "sidebar  footer      footer  footer  ."
+        "sidebar  .           .       .       ."
       mediaquery:
         #phone
         "(max-width: 800px)":
@@ -46,6 +48,13 @@ views:
             "sidebar  media       hemma   ."
             "sidebar  footer      footer  ."
             "sidebar  .           .       ."
+    card_mod:
+      style: |
+        #card {
+          padding: 0;
+          border-width: 0;
+          font-family: SF Pro Display, Roboto, system-ui;
+        }
     cards:
       #extra_styles fix, do not remove
       #also warn if theme is not set
@@ -78,27 +87,232 @@ views:
       #                                               #
       #################################################
 
-      - type: vertical-stack
+      - type: "custom:mod-card"
         view_layout:
           grid-area: sidebar
-        cards:
-          - type: custom:button-card
-            entity: sensor.template_sidebar
-            template: sidebar
+        card_mod:
+          style:
+            .: |
+              :host {
+                margin: 0 !important;
+                border-radius: 0 !important;
+              }
+              ha-card {
+                height: 100%;
+                background-color: rgba(0,0,0, .25);
+                border-radius: 0;
+                /* box-shadow: inset -10px 0px 17px 0px rgba(0, 0, 0, .6); */
+                border-right: 1px solid rgba(255,255,255,.1);
+              }
+            ha-card>hui-vertical-stack-card$#root mini-graph-card$: |
+              ha-card {
+                border-radius: 0
+              }
+            ha-card>hui-vertical-stack-card$#root: |
+              simple-weather-card {
+                margin-top: auto !important;
+                padding: 0 16px;
+              }
+              card-mod {
+                display: none;
+              }
 
-          - type: conditional
-            conditions:
-              - entity: input_boolean.laundry_display
-                state: "on"
-            card:
-              type: custom:button-card
-              entity: timer.laundry
-              double_tap_action:
-                action: call-service
-                service: input_boolean.turn_off
-                service_data:
-                  entity_id: input_boolean.laundry_display
-              template: laundry
+        card:
+          type: vertical-stack
+
+          cards:
+            - type: custom:button-card
+              entity: sensor.template_sidebar
+              template: sidebar
+
+            - type: horizontal-stack
+              card_mod:
+                style:
+              cards:
+                - type: custom:mushroom-person-card
+                  entity: person.samuelmp
+                  secondary_info: last-updated
+                  icon_type: entity-picture
+                  layout: vertical
+                - type: custom:mushroom-person-card
+                  entity: person.paloma
+                  secondary_info: last-updated
+                  icon_type: entity-picture
+                  layout: vertical
+            #########################    Minigraph to show temperature inside and out    #########################
+            - type: custom:simple-weather-card
+              entity: weather.aemet_daily
+              name: " "
+              # tap_action: !include popup/footer_weather.yaml
+              tap_action:
+                action: none
+            - type: "custom:mini-graph-card"
+              entities:
+                - entity: sensor.daystate_100
+                  color: "#FFFFFF88"
+                  name: Day
+                  show_legend: false
+                  show_line: false
+                  show_points: false
+                  y_axis: secondary
+              hours_to_show: 26
+              height: 220
+              points_per_hour: 2
+              show:
+                icon: false
+                legend: false
+                name: false
+                state: false
+              style: |
+                :host {
+                  position: absolute;
+                  bottom: 0;
+                  width: 100%;
+                  left: 0;
+                  overflow: hidden;
+                  background: none  !important;
+                  box-shadow: none !important;
+                  margin-top: 0px !important;
+                  margin-bottom: 0px !important;
+                }
+                ha-card {
+                  background: none  !important;
+                  padding: 0 !important;
+                  border-radius: 0;
+                }
+                ha-card>.graph {
+                  padding: 0 !important;
+                }
+            - type: "custom:mini-graph-card"
+              entities:
+                - entity: sensor.temperaturas
+                  name: Casa
+                  color: "#ec085d"
+                  y_axis: secondary
+              hours_to_show: 26
+              height: 200
+              decimals: 1
+              lower_bound_secondary: ~16
+              show:
+                icon: true
+                legend: false
+                name: false
+                state: true
+                fill: true
+                points: false
+                labels_secondary: true
+                extrema: true
+              style: |
+                :host {
+                  position: absolute;
+                  bottom: 0;
+                  width: 100%;
+                  left: 0;
+                  overflow: hidden;
+                  background: none  !important;
+                  box-shadow: none !important;
+                  margin-top: 0px !important;
+                  margin-bottom: 0px !important;
+                  --mdc-icon-size: 40px;
+                  --paper-item-icon-color: #ec085d;
+                }
+                ha-card {
+                  background: none  !important;
+                  padding: 0 !important;
+                  border-radius: 0;
+                }
+                ha-card>.graph {
+                  padding: 0 !important;
+                }
+                .header {
+                  font-size: 1vw;
+                  position: absolute !important;
+                  width: 20% !important;
+                  padding: 0 !important;
+                  left: 7.5% !important;
+                  top: 6% !important;
+                  height: 20% !important;
+                }
+                .states {
+                  font-size: 0.5vw !important;
+                  #padding: 1vw 0vw 0vw 0vw  !important;
+                  margin: auto !important;
+                  width: 80%;
+                  padding-top: 24px;
+                  padding-bottom: 32px;
+                  padding-left: 86px;
+                }
+                .info__item__type, .info__item__time {
+                  display: none;
+                }
+                .info__item__value {
+                  color: #FFFFFF;
+                  opacity: 1 !important;
+                }
+
+                .info.flex {
+                  justify-content: flex-end;
+                  position: absolute;
+                  right: 16px;
+                  top: 28px;
+                }
+                .info__item:first-child { 
+                  flex-direction: row;
+                  flex-wrap: nowrap;
+                }
+
+                .info__item:first-child::after { 
+                  content: "/";
+                  padding-left: 4px;
+                  padding-right: 4px;
+                }
+
+            - type: "custom:mini-graph-card"
+              entities:
+                - entity: sensor.aemet_temperature
+                  name: Exterior
+                  color: "#0c87f7"
+                  y_axis: primary
+              hours_to_show: 26
+              height: 110
+              show:
+                icon: false
+                legend: false
+                name: false
+                state: false
+                fill: true
+                points: false
+                labels: true
+              style: |
+                :host {
+                  left: 11.6%;
+                  top:  92.9%;
+                  overflow: hidden;
+                  height: 12%;
+                  background: none  !important;
+                  box-shadow: none !important;
+                  margin-top: 80px !important;
+                  margin-bottom: 0 !important;
+                }
+
+                ha-card {
+                  background: none  !important;
+                  padding: 0 !important;
+                }
+                .icon > ha-icon {
+                  width:1.8vw !important;
+                  height:1.8vw !important;
+                }
+                .state__time{
+                  font-size:0.9vw !important;
+                  margin-top: 0.2vw;
+                  font-weight: 300 !important;
+                  opacity: 0.4 !important;
+                }
+
+                ha-card>.graph {
+                  padding: 0 !important;
+                }
 
       #################################################
       #                                               #
@@ -144,11 +358,15 @@ views:
           - type: custom:button-card
             entity: climate.daikin_comedor
             name: "A/C"
-            double_tap_action: !include popup/studio_flakt.yaml
+            hold_action: !include popup/studio_flakt.yaml
             template:
               - base
               - icon_fan2
               - loader
+            variables:
+              temperature_sensor: sensor.nest_temperature
+              outdoor_temperature: sensor.aemet_temperature
+              humidity_sensor: sensor.nest_humidity
           # - type: custom:button-card
           #   entity: light.luz_tele_2
           #   template:
@@ -226,11 +444,16 @@ views:
           - type: custom:button-card
             entity: climate.daikin_ordenador
             name: "A/C"
-            double_tap_action: !include popup/studio_flakt.yaml
+            hold_action: !include popup/studio_flakt.yaml
             template:
               - base
               - icon_fan2
               - loader
+
+            variables:
+              temperature_sensor: sensor.daikin_ordenador_inside_temperature
+              outdoor_temperature: sensor.aemet_temperature
+              humidity_sensor: sensor.humidity_158d000171f1b3
           - type: custom:button-card
             entity: light.tira_led_ordenadores
             name: Tira Led
@@ -284,149 +507,165 @@ views:
 
       #################################################
       #                                               #
-      #                     MEDIA                     #
+      #                   Termostato                  #
       #                                               #
       #################################################
 
       - type: grid
-        title: Media
+        title: Termostato
         view_layout:
           grid-area: media
         columns: 1
         cards:
-          - type: custom:swipe-card
-            parameters:
-              speed: 550
-              spaceBetween: 40
-              threshold: 5
-            cards:
-              - type: horizontal-stack
-                cards:
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media
-                        state_not: Vardagsrum
-                      - entity: select.conditional_media
-                        state_not: Sovrum
-                      - entity: select.conditional_media
-                        state_not: Spotify
-                      - entity: select.conditional_media
-                        state_not: Kök
-                    card:
-                      # type: custom:button-card
-                      # entity: sensor.plex_recently_added
-                      # name: Última incorporación
-                      # tap_action:
-                      #   action: none
-                      # template:
-                      #   - conditional_media
-                      #   - icon_plex
+          - type: custom:thermostat-card
+            entity: climate.nest
+            title: NEST
+            card_mod:
+              style: |
+                .dial {
+                    user-select: none;
+                    --thermostat-off-fill: #00000033;
+                    --thermostat-path-color: rgba(255, 255, 255, 0.3);
+                    --thermostat-path-active-color: rgba(255, 255, 255, 0.8);
+                    --thermostat-path-active-color-large: rgba(255, 255, 255, 1);
+                    --thermostat-text-color: white;
+                }
+                ha-card {
+                  background: rgba(115, 115, 115, 0.25);
+                }
+          # - type: custom:swipe-card
+          #   parameters:
+          #     speed: 550
+          #     spaceBetween: 40
+          #     threshold: 5
+          #   cards:
+          #     - type: horizontal-stack
+          #       cards:
+          #         - type: conditional
+          #           conditions:
+          #             - entity: select.conditional_media
+          #               state_not: Vardagsrum
+          #             - entity: select.conditional_media
+          #               state_not: Sovrum
+          #             - entity: select.conditional_media
+          #               state_not: Spotify
+          #             - entity: select.conditional_media
+          #               state_not: Kök
+          #           card:
+          #             # type: custom:button-card
+          #             # entity: sensor.plex_recently_added
+          #             # name: Última incorporación
+          #             # tap_action:
+          #             #   action: none
+          #             # template:
+          #             #   - conditional_media
+          #             #   - icon_plex
 
-                      # type: custom:button-card
-                      # entity: media_player.spotify_samuelmp
-                      # name: >
-                      #   [[[ return entity.attributes.media_artist; ]]]
-                      # state_display: >
-                      #   [[[ return entity.attributes.media_title; ]]]
-                      # template:
-                      #   - conditional_media
-                      #   - icon_spotify
+          #             # type: custom:button-card
+          #             # entity: media_player.spotify_samuelmp
+          #             # name: >
+          #             #   [[[ return entity.attributes.media_artist; ]]]
+          #             # state_display: >
+          #             #   [[[ return entity.attributes.media_title; ]]]
+          #             # template:
+          #             #   - conditional_media
+          #             #   - icon_spotify
 
-                      type: custom:thermostat-card
-                      entity: climate.nest
-                      title: NEST
-                      card_mod:
-                        style: |
-                          .dial {
-                              user-select: none;
-                              --thermostat-off-fill: #3267d3c2;
-                              --thermostat-path-color: rgba(255, 255, 255, 0.3);
-                              --thermostat-path-active-color: rgba(255, 255, 255, 0.8);
-                              --thermostat-path-active-color-large: rgba(255, 255, 255, 1);
-                              --thermostat-text-color: white;
-                          }
-                          ha-card {
-                            background: rgba(0, 0, 0, 0.0);
-                          }
+          #             type: custom:thermostat-card
+          #             entity: climate.nest
+          #             title: NEST
+          #             card_mod:
+          #               style: |
+          #                 .dial {
+          #                     user-select: none;
+          #                     --thermostat-off-fill: #00000033;
+          #                     --thermostat-path-color: rgba(255, 255, 255, 0.3);
+          #                     --thermostat-path-active-color: rgba(255, 255, 255, 0.8);
+          #                     --thermostat-path-active-color-large: rgba(255, 255, 255, 1);
+          #                     --thermostat-text-color: white;
+          #                 }
+          #                 ha-card {
+          #                   background: rgba(115, 115, 115, 0.25);
+          #                 }
 
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media
-                        state: Vardagsrum
-                    card:
-                      type: custom:button-card
-                      entity: media_player.vardagsrum
-                      triggers_update: sensor.youtube_watching
-                      template:
-                        - conditional_media
-                        - icon_apple_tv
+          #         - type: conditional
+          #           conditions:
+          #             - entity: select.conditional_media
+          #               state: Vardagsrum
+          #           card:
+          #             type: custom:button-card
+          #             entity: media_player.vardagsrum
+          #             triggers_update: sensor.youtube_watching
+          #             template:
+          #               - conditional_media
+          #               - icon_apple_tv
 
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media
-                        state: Sovrum
-                    card:
-                      type: custom:button-card
-                      entity: media_player.sovrum
-                      triggers_update: sensor.youtube_watching
-                      template:
-                        - conditional_media
-                        - icon_apple_tv
+          #         - type: conditional
+          #           conditions:
+          #             - entity: select.conditional_media
+          #               state: Sovrum
+          #           card:
+          #             type: custom:button-card
+          #             entity: media_player.sovrum
+          #             triggers_update: sensor.youtube_watching
+          #             template:
+          #               - conditional_media
+          #               - icon_apple_tv
 
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media
-                        state: Spotify
-                    card:
-                      type: custom:button-card
-                      entity: media_player.spotify_samuelmp
-                      template:
-                        - conditional_media
-                        - icon_spotify
+          #         - type: conditional
+          #           conditions:
+          #             - entity: select.conditional_media
+          #               state: Spotify
+          #           card:
+          #             type: custom:button-card
+          #             entity: media_player.spotify_samuelmp
+          #             template:
+          #               - conditional_media
+          #               - icon_spotify
 
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media
-                        state: Kök
-                    card:
-                      type: custom:button-card
-                      entity: media_player.kok
-                      template:
-                        - conditional_media
-                        - icon_nest_mini
+          #         - type: conditional
+          #           conditions:
+          #             - entity: select.conditional_media
+          #               state: Kök
+          #           card:
+          #             type: custom:button-card
+          #             entity: media_player.kok
+          #             template:
+          #               - conditional_media
+          #               - icon_nest_mini
 
-              - type: grid
-                columns: 2
-                cards:
-                  - type: custom:button-card
-                    entity: media_player.vardagsrum
-                    triggers_update: sensor.youtube_watching
-                    name: Vardagsrum
-                    template:
-                      - media
-                      - icon_apple_tv
+          #     - type: grid
+          #       columns: 2
+          #       cards:
+          #         - type: custom:button-card
+          #           entity: media_player.vardagsrum
+          #           triggers_update: sensor.youtube_watching
+          #           name: Vardagsrum
+          #           template:
+          #             - media
+          #             - icon_apple_tv
 
-                  - type: custom:button-card
-                    entity: media_player.sovrum
-                    triggers_update: sensor.youtube_watching
-                    name: Sovrum
-                    template:
-                      - media
-                      - icon_apple_tv
+          #         - type: custom:button-card
+          #           entity: media_player.sovrum
+          #           triggers_update: sensor.youtube_watching
+          #           name: Sovrum
+          #           template:
+          #             - media
+          #             - icon_apple_tv
 
-                  - type: custom:button-card
-                    entity: media_player.spotify_samuelmp
-                    name: Spotify
-                    template:
-                      - media
-                      - icon_spotify
+          #         - type: custom:button-card
+          #           entity: media_player.spotify_samuelmp
+          #           name: Spotify
+          #           template:
+          #             - media
+          #             - icon_spotify
 
-                  - type: custom:button-card
-                    entity: media_player.kok
-                    name: Nest Mini
-                    template:
-                      - media
-                      - icon_nest_mini
+          #         - type: custom:button-card
+          #           entity: media_player.kok
+          #           name: Nest Mini
+          #           template:
+          #             - media
+          #             - icon_nest_mini
 
       #################################################
       #                                               #
@@ -600,18 +839,6 @@ views:
                 ]]]
             template: footer
           - type: custom:button-card
-            entity: sensor.template_updates
-            name: >
-              <ha-icon icon="mdi:arrow-up-bold-circle-outline"></ha-icon> Uppdatera
-            tap_action: !include popup/footer_updates.yaml
-            variables:
-              notify: >
-                [[[
-                  return parseInt(entity?.state);
-                ]]]
-            template: footer
-
-          - type: custom:button-card
             name: >
               <ha-icon icon="mdi:robot-vacuum-variant"></ha-icon> Aspirador
             tap_action: !include popup/footer_vacuum.yaml
@@ -624,39 +851,61 @@ views:
                   if (id) return (Date.now() - Date.parse(id.state)) > 6048e5;
                 ]]]
             template: footer
-
           - type: custom:button-card
             name: >
-              <ha-icon icon="mdi:chart-line-variant"></ha-icon> Historik
-            tap_action: !include popup/footer_history.yaml
+              <ha-icon icon="mdi:weather-partly-cloudy"></ha-icon> Clima
+            tap_action: !include popup/footer_weather.yaml
             template: footer
 
           - type: custom:button-card
             name: >
-              <ha-icon icon="mdi:tablet"></ha-icon> Platta
-            tap_action: !include popup/footer_tablet.yaml
-            variables:
-              notify: >
-                [[[
-                  let id = states['binary_sensor.galaxy_tab_a_plugged_in'];
-                  if (id) return id.state === 'off';
-                ]]]
+              <ha-icon icon="mdi:lightning-bolt-circle"></ha-icon> Energía
+            tap_action: !include popup/footer_vacuum.yaml
             template: footer
+          # - type: custom:button-card
+          #   entity: sensor.template_updates
+          #   name: >
+          #     <ha-icon icon="mdi:arrow-up-bold-circle-outline"></ha-icon> Uppdatera
+          #   tap_action: !include popup/footer_updates.yaml
+          #   variables:
+          #     notify: >
+          #       [[[
+          #         return parseInt(entity?.state);
+          #       ]]]
+          #   template: footer
 
-          - type: custom:button-card
-            name: >
-              <ha-icon icon="mdi:router-wireless"></ha-icon> Router
-            tap_action: !include popup/footer_router.yaml
-            triggers_update:
-              - update.unifi_dream_machine
-              - binary_sensor.template_udm_internet
-            variables:
-              notify: >
-                [[[
-                  let id = this._config.triggers_update;
-                  if (id.every(e => states[e]))
-                      return states[id[0]].state === 'on'
-                          ? 1
-                          : states[id[1]].state === 'off';
-                ]]]
-            template: footer
+          # - type: custom:button-card
+          #   name: >
+          #     <ha-icon icon="mdi:chart-line-variant"></ha-icon> Historik
+          #   tap_action: !include popup/footer_history.yaml
+          #   template: footer
+
+          # - type: custom:button-card
+          #   name: >
+          #     <ha-icon icon="mdi:tablet"></ha-icon> Platta
+          #   tap_action: !include popup/footer_tablet.yaml
+          #   variables:
+          #     notify: >
+          #       [[[
+          #         let id = states['binary_sensor.galaxy_tab_a_plugged_in'];
+          #         if (id) return id.state === 'off';
+          #       ]]]
+          #   template: footer
+
+          # - type: custom:button-card
+          #   name: >
+          #     <ha-icon icon="mdi:router-wireless"></ha-icon> Router
+          #   tap_action: !include popup/footer_router.yaml
+          #   triggers_update:
+          #     - update.unifi_dream_machine
+          #     - binary_sensor.template_udm_internet
+          #   variables:
+          #     notify: >
+          #       [[[
+          #         let id = this._config.triggers_update;
+          #         if (id.every(e => states[e]))
+          #             return states[id[0]].state === 'on'
+          #                 ? 1
+          #                 : states[id[1]].state === 'off';
+          #       ]]]
+          #   template: footer

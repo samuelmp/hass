@@ -13,7 +13,6 @@ browser_mod:
       columns: 2
       square: false
       cards:
-
         #kwh
         - type: custom:apexcharts-card
           graph_span: 12months
@@ -184,7 +183,7 @@ browser_mod:
             - entity: sensor.date
               curve: smooth
               name: Mattias
-              color: '#9a0ca3'
+              color: "#9a0ca3"
               data_generator: |-
                 let params = new URLSearchParams({
                   db: 'home_assistant',
@@ -279,7 +278,7 @@ browser_mod:
             - entity: sensor.date
               curve: smooth
               name: Mattias
-              color: '#9a0ca3'
+              color: "#9a0ca3"
               data_generator: |-
                 let token_url = 'http://192.168.1.241:8123/local/.apex.json';
                 let api_url = 'https://api.github.com/repos/matt8707/hass-config';
@@ -420,7 +419,7 @@ browser_mod:
                       label: Entities
                       fontSize: 15px
                       fontWeight: 800
-                      color: '#ffffff50'
+                      color: "#ffffff50"
           series:
             - entity: sensor.template_domain_counter
               attribute: automation
@@ -446,7 +445,7 @@ browser_mod:
             - entity: sensor.template_domain_counter
               attribute: other
               name: Other
-        
+
         #radial
         - type: grid
           cards:
@@ -473,13 +472,13 @@ browser_mod:
                         offsetY: 5
                         fontSize: 50px
                         fontWeight: 600
-                        color: '#379c55'
+                        color: "#379c55"
                       total:
                         show: true
                         fontSize: 21px
                         fontWeight: 300
                         label: CPU Load
-                        color: '#a8a8a8'
+                        color: "#a8a8a8"
                         formatter: |
                           EVAL:(w) => {
                             return w.globals.seriesTotals + '٪';
@@ -499,14 +498,14 @@ browser_mod:
                       imageClipped: false
                     track:
                       show: true
-                      background: '#222222'
+                      background: "#222222"
                       strokeWidth: 155%
                 stroke:
                   dashArray: 3.2
                   lineCap: butt
               series:
-                - entity: sensor.template_udm_cpu
-                  color: '#379c55'
+                - entity: sensor.load_1m
+                  color: "#379c55"
             - type: custom:apexcharts-card
               chart_type: radialBar
               apex_config:
@@ -530,13 +529,13 @@ browser_mod:
                         offsetY: 5
                         fontSize: 50px
                         fontWeight: 600
-                        color: '#379c55'
+                        color: "#379c55"
                       total:
                         show: true
                         fontSize: 21px
                         fontWeight: 300
                         label: CPU Temp
-                        color: '#a8a8a8'
+                        color: "#a8a8a8"
                         formatter: |
                           EVAL:(w) => {
                             return w.globals.seriesTotals + '°';
@@ -557,13 +556,13 @@ browser_mod:
                       imageClipped: false
                     track:
                       show: true
-                      background: '#222222'
+                      background: "#222222"
                       strokeWidth: 155%
                 stroke:
                   dashArray: 3.2
                   lineCap: butt
               series:
-                - entity: sensor.template_udm_cpu_temp
-                  color: '#379c55'
+                - entity: sensor.load_1m
+                  color: "#379c55"
           columns: 2
           square: true

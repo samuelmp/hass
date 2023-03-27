@@ -1,0 +1,90 @@
+title: El tiempo
+style: |
+  --popup-max-width: 90vw;
+  --primary-color: transparent; /* hide timeout progress */
+card_mod:
+  style:
+    # card divider border
+    layout-card$grid-layout$: |
+      #root {
+        margin: -24px 0 !important;
+      }
+      hui-vertical-stack-card {
+        
+        border-radius: 0;
+        transition: none;
+      }
+      /* phone */
+      @media screen and (max-width: 800px) {
+        hui-vertical-stack-card {
+          border-right: none;
+          border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
+        }
+      }
+    layout-card$grid-layout$#root>hui-vertical-stack-card$#root>weather-card$ha-card:
+      |
+      .day {
+        border-right-color: rgba(255, 255, 255, 0.15) !important;
+      }
+
+    layout-card$grid-layout$#root>hui-vertical-stack-card$#root: |
+      hui-horizontal-stack-card {
+        margin-top: 32px !important;
+      }
+    layout-card$grid-layout$#root>hui-vertical-stack-card$#root>hui-horizontal-stack-card$:
+      |
+      #root {
+        gap: 16px;
+        justify-content: space-around;
+        margin-right: 16px;
+      }
+
+content:
+  type: custom:layout-card
+  layout_type: custom:grid-layout
+  layout:
+    margin: 0
+    grid-template-columns: 1100px
+    grid-template-rows: 1fr
+    grid-template-areas: |
+      "weather"
+    mediaquery:
+      #phone
+      "(max-width: 800px)":
+        grid-template-columns: 1fr
+        grid-template-rows: repeat(2, 1fr)
+        grid-template-areas: |
+          "weather"
+  cards:
+    ### Configurar
+
+    - type: vertical-stack
+      view_layout:
+        grid-area: weather
+      cards:
+        - type: custom:weather-card
+          entity: weather.aemet_daily
+          details: true
+          number_of_forecasts: 6
+        - type: custom:hourly-weather
+          entity: weather.aemet_hourly
+          num_segments: 18 # optional, defaults to 12
+          name: Próximas 18 horas # optional, defaults to "Hourly Weather"
+          icons: true
+        - type: horizontal-stack
+          cards:
+            - type: custom:button-card
+              name: >
+                <ha-icon icon="mdi:map"></ha-icon> Mapa temperatura
+              tap_action: !include footer_weather_temp.yaml
+              template: footer
+            - type: custom:button-card
+              name: >
+                <ha-icon icon="mdi:map"></ha-icon> Mapa lluvia
+              tap_action: !include footer_weather_rain.yaml
+              template: footer
+            - type: custom:button-card
+              name: >
+                <ha-icon icon="mdi:map"></ha-icon> Mapa viento
+              tap_action: !include footer_weather_wind.yaml
+              template: footer

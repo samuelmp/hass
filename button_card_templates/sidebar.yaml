@@ -6,12 +6,10 @@ sidebar:
   name: >
     [[[
       if (entity) {
-          let attr = [];
-          for (let [k, value] of Object.entries(entity.attributes))
-              window.navigator.userAgent.match(/iPhone/i)
-                  ? k !== 'time' && k !== 'date' && value !== false && (attr += `<p>${k === 'greet' ? `<span class="iphone">${value}</span>` : `${value}`}</p>`)
-                  : value !== false && (attr += `<p>${value}</p>`);
-          return attr;
+        let attr = [];
+        for (let [k, value] of Object.entries(entity.attributes))
+          value !== false && (attr += `<p>${value}</p>`);
+        return attr;
       }
     ]]]
   extra_styles: >

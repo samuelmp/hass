@@ -56,7 +56,6 @@ light:
       [[[
         if (entity) {
             // if light group get brightness from child to remove bounce
-            console.log(entity);
             let child = entity.attributes.entity_id,
                 brightness = child && states[child[0]].attributes.brightness
                     ? Math.round(states[child[0]].attributes.brightness / 2.54)

@@ -5,11 +5,9 @@ temperature:
     - graph
   show_name: true # Hides Card Name
   show_state: true # Hides Card state
-  tap_action:
-    !include ../popup/tempreature_popup.yaml
-  double_tap_action:
-    !include ../popup/tempreature_popup.yaml
-  hold_action: 
+  tap_action: !include ../popup/tempreature_popup.yaml
+  double_tap_action: !include ../popup/tempreature_popup.yaml
+  hold_action:
     action: none
   state_display: >
     [[[ return '&nbsp;'; ]]]
@@ -52,7 +50,7 @@ temperature:
             y_axis: secondary
           - entity: >
               [[[ { return variables.humidity_sensor; } ]]]
-            color: '#4a7aeb'
+            color: "#4a7aeb"
             y_axis: secondary
           - entity: >
               [[[ { return variables.temperature_sensor; } ]]]

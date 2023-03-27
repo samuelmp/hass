@@ -7,12 +7,288 @@ browser_mod:
       style:
         #popup header
         .:
+
+        ha-dialog>div.content>hui-vertical-stack-card$#root: |
+          hui-horizontal-stack-card {
+            border: 1px solid red;
+          }
+        div.content>hui-vertical-stack-card$#root: |
+          hui-horizontal-stack-card {
+            margin-top: 16px !important;
+            margin-bottom: 24px !important;
+          }
+          card-mod {
+            display: none;
+          }
+
     content:
-      type: custom:mushroom-climate-card
-      entity: climate.daikin_ordenador
-      icon: mdi:air-conditioner
-      collapsible_controls: false
-      hvac_modes:
-        - heat
-        - cool
-      show_temperature_control: true
+      type: vertical-stack
+      cards:
+        - type: horizontal-stack
+          cards:
+            - type: custom:mushroom-template-card
+              style: |
+                ha-card {
+                  padding: 6px 0px 0px 12px!important;
+                }
+              primary: >
+                [[[ return entity.attributes.friendly_name; ]]]
+              entity: >
+                [[[ return entity.entity_id; ]]]
+              secondary: >
+                {% set mode = states(entity) %}
+                {% if mode == 'off' %}
+                Apagado
+                {% elif mode == 'cool' %}
+                Frío
+                {% elif mode == 'heat' %}
+                Calor
+                {% else %}
+                {{ states(entity) | title }}
+                {% endif %}
+                ● Fan {{ state_attr(entity, 'fan_mode') }}
+              icon: |-
+                {% set mode = states(entity) %}
+                {% if mode == 'off' %}
+                mdi:power
+                {% elif mode == 'cool' %}
+                mdi:snowflake
+                {% elif mode == 'heat' %}
+                mdi:fire
+                {% elif mode == 'heat_cool' %}
+                mdi:autorenew
+                {% else %}
+                mdi:home-thermometer
+                {% endif %}
+              icon_color: |-
+                {% set status = states(entity) %}
+                {% if status == 'off' %}
+                disabled
+                {% elif status == 'cool' %}
+                blue
+                {% elif status == 'heat' %}
+                deep-orange
+                {% else %}
+                grey
+                {% endif %}
+              tap_action: none
+            - type: custom:simple-thermostat
+              style: |
+                ha-card {
+                  --st-spacing: 0px;
+                }
+                ha-card .current--value {
+                  color: #ffffff;
+                }
+                header {
+                  margin-bottom: 12px !important;
+                  padding-bottom: 0px !important;
+                }
+                ha-card .thermostat-trigger { 
+                  color: #9e9e9e;
+                }
+              entity: >
+                [[[ return entity.entity_id; ]]]
+              header: false
+              decimals: "0"
+              fallback: "Off"
+              hide:
+                temperature: true
+                state: true
+              layout:
+                mode:
+                  names: false
+                  icons: false
+                  headings: false
+                step: row
+              step_size: "1"
+              control: false
+
+        - type: custom:simple-thermostat
+          style: |
+            ha-card {
+              --st-font-size-toggle-label: 6px
+              --st-spacing: 0px;
+              --st-default-spacing: 12px;
+              --st-mode-background: #262626;
+              margin-left: 12px;
+              margin-right: 12px;
+            }
+            ha-card.no-header {
+              padding: 0 !important;
+              padding-bottom: 16px !important;
+              margin-left: 0;
+              margin-right: 0;
+            }
+            ha-card section.body {
+              display: none;
+            }
+            ha-card .mode-item.active.off { 
+              background: #363636;
+              color: #9e9e9e;
+            }
+            ha-card .mode-item.active.cool { 
+              background: #1d3447;
+              color: #2196f3;
+            }
+            ha-card .mode-item.active.heat { 
+              background: #472421;
+              color: #f44336;
+            }
+            ha-card .mode-item.active { 
+              background: #263926;
+              color: #4caf50;
+            }
+            ha-card .mode-item.active:hover { 
+              background: #363636;
+              color: #9e9e9e;
+            }
+            ha-card .mode-item:hover { 
+              background: #363636;
+              color: #9e9e9e;
+            }
+            ha-card .mode-item {
+              --st-spacing: 10px;
+              border-radius: 10px;
+            }
+            ha-card .modes {
+              grid-gap: 12px;
+              margin-top: 0;
+            }
+          entity: >
+            [[[ return entity.entity_id; ]]]
+          header: false
+          setpoints: false
+          hide:
+            temperature: true
+            state: true
+          layout:
+            mode:
+              headings: false
+              icons: true
+              names: true
+            step: row
+          control:
+            hvac:
+              "off":
+                name: "Apagado"
+              heat:
+                name: Calor
+              cool:
+                name: Frío
+              heat_cool: false
+              fan_only: false
+              dry: false
+
+        - type: custom:stack-in-card
+          keep:
+            margin: false
+            box_shadow: false
+            background: false
+          cards:
+            - type: vertical-stack
+              cards:
+                - type: horizontal-stack
+                  cards:
+                    - type: custom:mushroom-template-card
+                      primary: >
+                        [[[ { return entity.attributes.current_temperature + " ºC"; } ]]]
+                      secondary: Interior
+                      icon: mdi:thermometer
+                      entity: >
+                        [[[ { return entity.entity_id; } ]]]
+                      icon_color: blue
+                      badge_icon: |-
+                        {% set temp = state_attr(entity,'current_temperature') | int %}
+                        {% set setpoint = state_attr(entity,'temperature') | int %}
+                        {% if temp == setpoint %} mdi:check-bold
+                        {% elif temp <= 20 %} mdi:snowflake
+                        {% elif temp >= 28 %} mdi:heat-wave
+                        {% else %}
+                        {% endif %}
+                      badge_color: |-
+                        {% set temp = state_attr(entity,'current_temperature') | int %}
+                        {% set setpoint = state_attr(entity,'temperature') | int %}
+                        {% if temp == setpoint %} green
+                        {% elif temp <= 60 %} blue
+                        {% elif temp >= 80 %} deep-orange
+                        {% else %}
+                        {% endif %}
+                      picture: ""
+                    - type: custom:mushroom-template-card
+                      primary: "{{ states('sensor.aemet_temperature') | round|int }} ºC"
+                      secondary: Exterior
+                      icon: mdi:thermometer
+                      entity: >
+                        [[[ { return variables.temperature_sensor; } ]]]
+                      icon_color: green
+                      badge_icon: |-
+                        {% set outside_temp = states('sensor.aemet_temperature') | int %}
+                        {% set inside_temp = states(entity) | int %}
+                        {% if outside_temp == inside_temp %} mdi:equal
+                        {% elif outside_temp <= 10 %} mdi:snowflake
+                        {% elif outside_temp >= 30 %} mdi:heat-wave
+                        {% else %}
+                        {% endif %}
+                      badge_color: |-
+                        {% set outside_temp = states('sensor.aemet_temperature') | int %}
+                        {% set inside_temp = states(entity) | int %}
+                        {% if outside_temp == inside_temp %} green
+                        {% elif outside_temp <= 10 %} blue
+                        {% elif outside_temp >= 30 %} deep-orange
+                        {% else %}
+                        {% endif %}
+                      picture: ""
+                - type: "custom:mini-graph-card"
+                  entities:
+                    - entity: sensor.daystate_100
+                      color: grey
+                      name: Day
+                      show_legend: false
+                      show_line: false
+                      show_points: false
+                      y_axis: secondary
+                  hours_to_show: 26
+                  show:
+                    icon: false
+                    legend: false
+                    name: false
+                    state: false
+                  style: |
+                    :host {
+                      position: absolute;
+                      bottom: 0;
+                      width: 100%;
+                      left: 0;
+                      overflow: hidden;
+                      background: none  !important;
+                      box-shadow: none !important;
+                      margin-top: 20px !important;
+                      margin-bottom: 0 !important;
+                    }
+                    ha-card {
+                      background: none  !important;
+                      padding: 0 !important;
+                      border-radius: 0;
+                    }
+
+                - type: custom:mini-graph-card
+                  entities:
+                    - entity: >
+                        [[[ { return variables.temperature_sensor; } ]]]
+                      name: Inside Temperature
+                      color: "#2196f3"
+                    - entity: >
+                        [[[ { return variables.outdoor_temperature; } ]]]
+                      name: Outside Temperature
+                      color: "#4caf50"
+                  hours_to_show: 24
+                  line_width: 3
+                  font_size: 50
+                  animate: true
+                  show:
+                    name: false
+                    icon: false
+                    state: false
+                    legend: false
+                    fill: fade

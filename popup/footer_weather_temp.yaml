@@ -1,0 +1,66 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: Mapa - Temperatura
+    style: |
+      --popup-max-width: 95vw;
+      --primary-color: transparent; /* hide timeout progress */
+    card_mod:
+      style:
+        # card divider border
+        layout-card$grid-layout$: |
+          #root {
+            margin: -24px 0 !important;
+          }
+          hui-vertical-stack-card {
+            
+            border-radius: 0;
+            transition: none;
+          }
+          /* phone */
+          @media screen and (max-width: 800px) {
+            hui-vertical-stack-card {
+              border-right: none;
+              border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
+            }
+          }
+        layout-card$grid-layout$#root>hui-horizontal-stack-card$: |
+          #root {
+            gap: 16px;
+            justify-content: space-around;
+            margin-right: 16px;
+          }
+    content:
+      type: custom:layout-card
+      layout_type: custom:grid-layout
+      layout:
+        margin: 0
+        grid-template-columns: 1200px
+        grid-template-rows: 1fr
+        grid-template-areas: |
+          "weather"
+        mediaquery:
+          #phone
+          "(max-width: 800px)":
+            grid-template-columns: 1fr
+            grid-template-rows: repeat(2, 1fr)
+            grid-template-areas: |
+              "weather"
+      cards:
+        ### Configurar
+
+        - type: vertical-stack
+          view_layout:
+            grid-area: weather
+          cards:
+            - type: iframe
+              url: https://embed.windy.com/embed2.html?lat=39.943&lon=-3.824&detailLat=40.279&detailLon=-3.786&width=800&height=600&zoom=6&level=surface&overlay=temp&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1
+              aspect_ratio: 60%
+            # - type: horizontal-stack
+            #   cards:
+            #     - type: custom:button-card
+            #       name: >
+            #         <ha-icon icon="mdi:map"></ha-icon> Mapa lluvia
+            #       tap_action: !include footer_weather_rain.yaml
+            #       template: footer
