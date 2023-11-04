@@ -107,11 +107,9 @@
     vacuum_cleaned_area:
       friendly_name: "Vacuum - Cleaned Area"
       value_template: "{{ states.vacuum.aspirador.attributes.cleaned_area }}"
-
-- platform: version
-  name: HASS Available
-  source: docker
-  beta: true
-
-- platform: version
-  name: HASS Installed
+    home_assistant_installed_version:
+      friendly_name: "Versión Instalada"
+      value_template: "{{ states.update.home_assistant_core_update.attributes.installed_version }}"
+    home_assistant_latest_version:
+      friendly_name: "Última versión"
+      value_template: "{{ states.update.home_assistant_core_update.attributes.latest_version }}"

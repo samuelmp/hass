@@ -12,8 +12,8 @@ views:
     layout:
       #default
       margin: 0
-      height: 100vh
-      grid-gap: var(--custom-layout-card-padding)
+      height: 100%
+      grid-gap: .5vw var(--custom-layout-card-padding)
       grid-template-columns: repeat(4, 1fr) 0
       grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
       grid-template-areas: |
@@ -156,7 +156,7 @@ views:
                   show_points: false
                   y_axis: secondary
               hours_to_show: 26
-              height: 220
+              height: 130
               points_per_hour: 2
               show:
                 icon: false
@@ -190,9 +190,8 @@ views:
                   color: "#ec085d"
                   y_axis: secondary
               hours_to_show: 26
-              height: 200
+              height: 120
               decimals: 1
-              lower_bound_secondary: ~16
               show:
                 icon: true
                 legend: false
@@ -230,7 +229,7 @@ views:
                   width: 20% !important;
                   padding: 0 !important;
                   left: 7.5% !important;
-                  top: 6% !important;
+                  top: 7% !important;
                   height: 20% !important;
                 }
                 .states {
@@ -254,7 +253,7 @@ views:
                   justify-content: flex-end;
                   position: absolute;
                   right: 16px;
-                  top: 28px;
+                  top: 26px;
                 }
                 .info__item:first-child { 
                   flex-direction: row;
@@ -274,7 +273,7 @@ views:
                   color: "#0c87f7"
                   y_axis: primary
               hours_to_show: 26
-              height: 110
+              height: 120
               show:
                 icon: false
                 legend: false
@@ -291,7 +290,7 @@ views:
                   height: 12%;
                   background: none  !important;
                   box-shadow: none !important;
-                  margin-top: 80px !important;
+                  margin-top: 20px !important;
                   margin-bottom: 0 !important;
                 }
 

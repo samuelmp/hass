@@ -23,10 +23,10 @@ scene: !include scenes.yaml
 #binary_sensor: !include binary_sensors.yaml
 sensor: !include includes/sensors.yaml
 
-vacuum:
-  - platform: xiaomi_miio
-    host: !secret xiaomi_vacuum_ip
-    token: !secret xiaomi_vacuum_token
+# vacuum:
+#  - platform: xiaomi_miio
+#    host: !secret xiaomi_vacuum_ip
+#    token: !secret xiaomi_vacuum_token
 
 camera:
   - platform: xiaomi_cloud_map_extractor
