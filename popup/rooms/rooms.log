@@ -1,0 +1,46 @@
+rooms=[
+    HomeDataRoom(id=17509996, name='Habitación principal'),
+    HomeDataRoom(id=17509991, name='Baño uno'),
+    HomeDataRoom(id=17332119, name='Tendedero'),
+    HomeDataRoom(id=17330626, name='Habitación Peques'),
+    HomeDataRoom(id=17326810, name='Habitación Pekes'),
+    HomeDataRoom(id=17321506, name='Dormitorio principal'),
+    HomeDataRoom(id=17321487, name='Cocina1'),
+    HomeDataRoom(id=17321484, name='Comedor'),
+    HomeDataRoom(id=17321481, name='Cocina'),
+    HomeDataRoom(id=17321474, name='Habitación'),
+    HomeDataRoom(id=17321467, name='Habitación Mario'),
+    HomeDataRoom(id=17321425, name='Pekes'),
+    HomeDataRoom(id=17321420, name='Pakes'),
+    HomeDataRoom(id=17321406, name='Entrada'),
+    HomeDataRoom(id=17321402, name='Recibidor'),
+    HomeDataRoom(id=17321390, name='Baño'),
+    HomeDataRoom(id=17321379, name='Baño dos')
+]
+
+
+
+get_room_mapping: [
+    [16, '17321481', 14],
+    [17, '17321406', 10],
+    [18, '17321484', 13],
+    [19, '17321474', 2],
+    [20, '17321390', 15],
+    [21, '17321379', 15],
+    [22, '17326810', 1],
+    [23, '17321467', 1],
+    [24, '17332119', 7]
+]
+
+
+rooms_ID=[
+    HomeDataRoom(id=24, name='Tendedero'),
+    HomeDataRoom(id=22, name='Habitación Pekes'),
+    HomeDataRoom(id=18, name='Comedor'),
+    HomeDataRoom(id=16, name='Cocina'),
+    HomeDataRoom(id=19, name='Habitación'),
+    HomeDataRoom(id=23, name='Habitación Mario'),
+    HomeDataRoom(id=17, name='Entrada'),
+    HomeDataRoom(id=20, name='Baño'),
+    HomeDataRoom(id=21, name='Baño dos')
+]

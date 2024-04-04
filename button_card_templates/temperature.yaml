@@ -57,11 +57,13 @@ temperature:
   styles:
     custom_fields:
       icon:
-        - width: 67%
+        - width: 100%
         - fill: "#9da0a2"
       circle:
         - display: initial
-        - width: 90%
-        - margin: 2% 0 0 0
+        - width: 110%
+        - margin: 0 -5px 0 0
         - justify-self: end
         - opacity: 1
+    grid:
+      - grid-template-columns: 1fr 2fr

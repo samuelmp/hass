@@ -4,7 +4,7 @@ default_config:
 # Load frontend themes from the themes folder
 frontend:
   extra_module_url:
-    - /hacsfiles/lovelace-card-mod/card-mod.js
+    - /local/community/lovelace-card-mod/card-mod.js
   themes: !include_dir_merge_named themes
 
 http:
@@ -35,21 +35,21 @@ camera:
     username: !secret xiaomi_user
     password: !secret xiaomi_password
     name: vacuum_map
+    auto_update: false
     colors:
       color_robo: [224, 224, 224]
       color_charger: [27, 117, 27]
       color_path: [30, 80, 113]
       color_goto_path: [30, 80, 113]
-      color_map_wall_v2: [30, 30, 30]
+      color_map_wall: [200, 200, 200]
       color_obstacle: [30, 30, 30]
       color_virtual_walls: [255, 0, 0, 60]
       color_no_go_zones_outline: [255, 0, 0, 60]
       color_no_go_zones: [255, 0, 0, 28]
-      color_scan: [0, 0, 0, 0]
-      color_map_inside: [0, 0, 0, 0]
-      color_map_outside: [0, 0, 0, 0]
+      color_scan: [60, 60, 60, 0]
+      color_map_inside: [150, 150, 170, 60]
+      color_map_outside: [150, 130, 160, 70]
       color_grey_wall: [0, 0, 0, 0]
-      color_map_wall: [0, 0, 0, 0]
       color_zones_outline: [0, 0, 0, 0]
       color_zones: [0, 0, 0, 0]
     room_colors:
@@ -61,14 +61,10 @@ camera:
     draw:
       - all
     map_transformation:
-      scale: 2
-      trim:
-        top: 19
-        right: 21
-        bottom: 24
-        left: 21
+      scale: 1
+      rotate: 270
     sizes:
-      charger_radius: 10
+      charger_radius: 4
       vacuum_radius: 10
     attributes:
       - calibration_points
@@ -210,6 +206,8 @@ lovelace:
       { url: "/local/browser_mod_icon.js?v=0.5", type: module },
       { url: "/local/decluttering-card.js", type: module },
       { url: "/local/collapsable-cards.js", type: module },
+      { url: "/local/snowflakes.js?v=20.23", type: module },
+
       #{ url: '/local/bar-card.js',                                                  type: module },
       #{ url: '/local/more-info-card.js',                                            type: module },
       { url: "/local/digital-clock.js", type: module },
@@ -219,5 +217,23 @@ lovelace:
       { url: "/local/js/light-slider-card-lajv.js", type: module },
       { url: "/local/js/nightscout-card.js?v=0.0.31", type: module },
 
-      { url: "/local/fonts.css?v=2.1", type: css },
+      { url: "/local/fonts.css?v=2.2", type: css },
     ]
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+## TELEGRAM
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Telegram Bot
+telegram_bot:
+  - platform: polling
+    api_key: "328295017:AAHZnp-SiHjF97s9DEBKWsq311HDxo6l0RY"
+    allowed_chat_ids:
+      - 7331574
+# Notifier
+notify:
+  - platform: telegram
+    name: "centralperk"
+    chat_id: 7331574
+
+mqtt: !include mqtt.yaml

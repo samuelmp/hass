@@ -1,5 +1,6 @@
 button_card_templates: !include_dir_merge_named button_card_templates
 decluttering_templates: !include includes/decluttering_templates.yaml
+
 kiosk_mode:
   user_settings:
     - users:
@@ -56,31 +57,6 @@ views:
           font-family: SF Pro Display, Roboto, system-ui;
         }
     cards:
-      #extra_styles fix, do not remove
-      #also warn if theme is not set
-
-      - type: custom:button-card
-        view_layout:
-          grid-area: 1 / 2 / 2 / 5
-        name: SET THEME TO "tablet" IN PROFILE
-        tap_action:
-          action: navigate
-          navigation_path: /profile
-        styles:
-          card:
-            - display: >
-                [[[
-                  return hass.themes.theme === 'tablet'
-                      ? 'none'
-                      : 'initial';
-                ]]]
-          name:
-            - z-index: 1
-            - overflow: visible
-            - color: red
-            - font-weight: bolder
-            - font-size: xxx-large
-            - background: yellow
       #################################################
       #                                               #
       #                    SIDEBAR                    #
@@ -116,7 +92,6 @@ views:
               card-mod {
                 display: none;
               }
-
         card:
           type: vertical-stack
 
@@ -352,7 +327,21 @@ views:
           #             color: "#4a7aeb"
           #             y_axis: secondary
           #           - entity: sensor.nest_temperature
+          # REGLETA
+          - type: custom:button-card
+            entity: switch.super_regleta
+            name: Regleta
+            template:
+              - socket
+            variables:
+              power_entity: sensor.consumo_regleta_comedor
+              title: Super regleta
+              energy: sensor.acumulado_diario_super_regleta
 
+            hold_action:
+              action: block
+              ui_sound_tablet: undefined
+              card_bounce: undefined
           # AIRE COMEDOR
           - type: custom:button-card
             entity: climate.daikin_comedor
@@ -402,19 +391,6 @@ views:
               - base
               - icon_tv
               - loader
-          - type: custom:button-card
-            entity: switch.super_regleta
-            name: Regleta
-            template:
-              - socket
-            variables:
-              power_entity: sensor.consumo_regleta_comedor
-              title: Super regleta
-
-            hold_action:
-              action: block
-              ui_sound_tablet: undefined
-              card_bounce: undefined
 
       #################################################
       #                                               #
@@ -427,15 +403,25 @@ views:
           grid-area: studio
         columns: 2
         cards:
+          - type: custom:button-card
+            entity: switch.enchufe_ordenadores_outlet
+            name: Escritorio
+            template:
+              - socket
+            variables:
+              power_entity: sensor.enchufe_ordenadores_power
+              title: Enchufe ordenadores
+              energy: sensor.enchufe_ordenadores_energy
+
           # Sensor temperatura ordenadores
           - type: custom:button-card
             template:
               - temperature
-            entity: sensor.daikin_ordenador_inside_temperature
+            entity: sensor.temperatura_ordenadores_temperature
             name: "&nbsp;"
             variables:
-              temperature_sensor: sensor.daikin_ordenador_inside_temperature
-              humidity_sensor: sensor.humidity_158d000171f1b3
+              temperature_sensor: sensor.temperatura_ordenadores_temperature
+              humidity_sensor: sensor.temperatura_ordenadores_humidity
               title: Temperatura ordenadores
               popup_icon: mdi:desk
 
@@ -459,14 +445,7 @@ views:
             template:
               - light
               - icon_hue
-          - type: custom:button-card
-            entity: switch.enchufe_ordenadores
-            name: Escritorio
-            template:
-              - socket
-            variables:
-              power_entity: sensor.consumo_enchufe_ordenadores
-              title: Enchufe ordenadores
+
       #################################################
       #                                               #
       #                    COCINA                     #
@@ -480,13 +459,35 @@ views:
         columns: 2
         cards:
           - type: custom:button-card
+            entity: switch.enchufe_nevera
+            name: Nevera
+            template:
+              - socket
+            variables:
+              power_entity: sensor.consumo_enchufe_nevera
+              title: Enchufe Nevera
+              energy: sensor.acumulado_diario_nevera
+            hold_action:
+              action: block
+              ui_sound_tablet: undefined
+              card_bounce: undefined
+          - type: custom:button-card
+            entity: switch.smart_plug_1908219105371225185548e1e90240bc_outlet
+            name: Enchufe
+            template:
+              - socket
+            variables:
+              power_entity: sensor.smart_plug_1908219105371225185548e1e90240bc_power
+              title: Enchufe cocina
+              energy: sensor.smart_plug_1908219105371225185548e1e90240bc_energy
+          - type: custom:button-card
             template:
               - temperature
-            entity: sensor.ble_temperature_temperatura_cocina
+            entity: sensor.sonoff_snzb_02_temperatura
             name: "&nbsp;"
             variables:
-              temperature_sensor: sensor.ble_temperature_temperatura_cocina
-              humidity_sensor: sensor.ble_humidity_temperatura_cocina
+              temperature_sensor: sensor.sonoff_snzb_02_temperatura
+              humidity_sensor: sensor.sonoff_snzb_02_humedad
               title: Temperatura cocina
               popup_icon: mdi:silverware-fork-knife
           - type: custom:button-card
@@ -495,14 +496,6 @@ views:
             template:
               - light
               - icon_hue
-          - type: custom:button-card
-            entity: switch.enchufe_cocina_socket_1
-            name: Enchufe
-            template:
-              - socket
-            variables:
-              power_entity: sensor.consumo_enchufe_cocina
-              title: Enchufe cocina
 
       #################################################
       #                                               #
@@ -516,9 +509,25 @@ views:
           grid-area: media
         columns: 1
         cards:
-          - type: custom:thermostat-card
+          # - type: custom:thermostat-card
+          #   entity: climate.nest
+          #   title: NEST
+          #   card_mod:
+          #     style: |
+          #       .dial {
+          #           user-select: none;
+          #           --thermostat-off-fill: #00000033;
+          #           --thermostat-path-color: rgba(255, 255, 255, 0.3);
+          #           --thermostat-path-active-color: rgba(255, 255, 255, 0.8);
+          #           --thermostat-path-active-color-large: rgba(255, 255, 255, 1);
+          #           --thermostat-text-color: white;
+          #       }
+          #       ha-card {
+          #         background: rgba(115, 115, 115, 0.25);
+          #       }
+          - type: thermostat
             entity: climate.nest
-            title: NEST
+            title: N
             card_mod:
               style: |
                 .dial {
@@ -532,6 +541,11 @@ views:
                 ha-card {
                   background: rgba(115, 115, 115, 0.25);
                 }
+                p.title {
+                  line-height: 4px;
+                  opacity: 0;
+                }
+
           # - type: custom:swipe-card
           #   parameters:
           #     speed: 550
@@ -678,6 +692,15 @@ views:
         columns: 2
         cards:
           - type: custom:button-card
+            entity: switch.enchufe_pekes_outlet
+            name: Escritorio
+            template:
+              - socket
+            variables:
+              power_entity: sensor.enchufe_pekes_power
+              title: Enchufe pekes
+              energy: sensor.enchufe_pekes_energy
+          - type: custom:button-card
             template:
               - temperature
             entity: sensor.temperature_158d0002018651
@@ -693,14 +716,7 @@ views:
             template:
               - light
               - icon_shade
-          - type: custom:button-card
-            entity: switch.enchufe_pekes_outlet
-            name: Escritorio
-            template:
-              - socket
-            variables:
-              power_entity: sensor.enchufe_pekes_power
-              title: Enchufe pekes
+
       #          - type: custom:button-card
       #            entity: light.badrum_group
       #            name: Badrum
@@ -743,6 +759,7 @@ views:
         view_layout:
           grid-area: hemma
         columns: 2
+
         cards:
           - type: custom:button-card
             template:
@@ -754,6 +771,7 @@ views:
               humidity_sensor: sensor.humidity_158d000171f1b3
               title: Temperatura entrada
               popup_icon: mdi:lamp
+
           - type: custom:button-card
             entity: light.bombilla_entrada
             name: Lampara
@@ -766,6 +784,16 @@ views:
             template:
               - light
               - icon_spot
+          - type: custom:button-card
+            template:
+              - temperature
+            entity: sensor.temperatura_exterior_temperature
+            name: "&nbsp;"
+            variables:
+              temperature_sensor: sensor.temperatura_exterior_temperature
+              humidity_sensor: sensor.temperatura_exterior_humidity
+              title: Temperatura exterior
+              popup_icon: mdi:sun-thermometer
       #          - type: custom:button-card
       #            entity: person.matte
       #            name: Mattias
@@ -778,7 +806,6 @@ views:
       #            template:
       #              - person
       #              - circle
-
       #          - type: custom:button-card
       #            entity: person.sanja
       #            name: Sanja
@@ -791,27 +818,23 @@ views:
       #            template:
       #              - person
       #              - circle
-
       #          - type: custom:button-card
       #            entity: script.home_leave
       #            name: Stäng allt
       #            template:
       #              - base
       #              - icon_away
-
       #          - type: custom:button-card
       #            entity: script.home_arrive
       #            name: Hemma
       #            template:
       #              - base
       #              - icon_home
-
       #################################################
       #                                               #
       #                    FOOTER                     #
       #                                               #
       #################################################
-
       - type: horizontal-stack
         view_layout:
           grid-area: footer
@@ -837,16 +860,17 @@ views:
                             parseFloat(states[id[3]].state) >= 85;
                 ]]]
             template: footer
+
           - type: custom:button-card
             name: >
-              <ha-icon icon="mdi:robot-vacuum-variant"></ha-icon> Aspirador
+              <ha-icon icon="mdi:robot-vacuum"></ha-icon> Aspirador
             tap_action: !include popup/footer_vacuum.yaml
             triggers_update:
               - sensor.date
             variables:
               notify: >
                 [[[
-                  let id = states['sensor.aspirador_last_clean_end'];
+                  let id = states['sensor.roborock_q5_pro_ultimo_final_limpio'];
                   if (id) return (Date.now() - Date.parse(id.state)) > 6048e5;
                 ]]]
             template: footer
@@ -907,4 +931,5 @@ views:
           #                 ? 1
           #                 : states[id[1]].state === 'off';
           #       ]]]
+
           #   template: footer

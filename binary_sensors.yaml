@@ -17,5 +17,5 @@ binary_sensor:
   - platform: template
     sensors:
       people_home:
-        friendly_name: "People home"
+        friendly_name: "Sun up"
         value_template: {{ state_attr('sun.sun', 'elevation') > 0 }}

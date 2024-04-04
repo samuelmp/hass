@@ -412,3 +412,10 @@ https://drive.google.com/file/d/1XRnmy2k0VFxOFaicnkdYH4o-wfAYZAf1/view?usp=shari
   font-style: italic;
   font-display: swap;
 }
+
+
+.snowflake__inner:before {
+  background-color: white;
+  border-radius: 100%;
+  background-image: none !important;
+}
