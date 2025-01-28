@@ -1,213 +1,223 @@
-- id: "1673351269459"
+- id: '1673351269459'
   alias: Encender Cine
   description: Enciende la tele y todas las luces
   trigger:
-    - platform: device
-      device_id: d9192629be7456ee8c341b137d2eac5a
-      domain: media_player
-      entity_id: media_player.television
-      type: turned_on
+  - platform: device
+    device_id: d9192629be7456ee8c341b137d2eac5a
+    domain: media_player
+    entity_id: media_player.television
+    type: turned_on
   condition: []
   action:
-    - if:
-        - condition: sun
-          before: sunrise
-          after: sunset
-      then:
-        - type: turn_on
-          device_id: 247c74391203fa852830509086051beb
-          entity_id: light.bombilla_salon
-          domain: light
-        - type: turn_on
-          device_id: 848c02320a43459fe3f4a094803baffb
-          entity_id: light.luz_tele_2
-          domain: light
-          brightness_pct: 100
-    - service: remote.send_command
-      data:
-        command: power_on
-        device: amplificador
-        num_repeats: 2
-        delay_secs: 1
-      target:
-        entity_id: remote.broadlink_remote_hub
-    - service: remote.send_command
-      data:
-        command: CD-R
-        device: amplificador
-        delay_secs: 2
-        num_repeats: 2
-      target:
-        entity_id: remote.broadlink_remote_hub
-  mode: single
-- id: "1673351355869"
-  alias: Apagar Cine
-  description: Apaga la tele y todas las luces del salón
-  trigger:
-    - platform: device
-      device_id: d9192629be7456ee8c341b137d2eac5a
-      domain: media_player
-      entity_id: media_player.television
-      type: turned_off
-  condition: []
-  action:
-    - type: turn_off
+  - if:
+    - condition: sun
+      before: sunrise
+      after: sunset
+    then:
+    - type: turn_on
       device_id: 247c74391203fa852830509086051beb
       entity_id: light.bombilla_salon
       domain: light
-    - type: turn_off
+    - type: turn_on
       device_id: 848c02320a43459fe3f4a094803baffb
       entity_id: light.luz_tele_2
       domain: light
-    - service: remote.send_command
-      data:
-        command: power_off
-        device: amplificador
-      target:
-        entity_id: remote.broadlink_remote_hub
+      brightness_pct: 100
+      enabled: false
+    - type: turn_on
+      device_id: f12220f23067f1b3874e7f6e83c511d9
+      entity_id: 8b30be4ffd2c38577af78cb540f2f9e1
+      domain: light
+      flash: long
+  - data:
+      command: power_on
+      device: amplificador
+      num_repeats: 2
+      delay_secs: 1
+    target:
+      entity_id: remote.broadlink_remote_hub
+    action: remote.send_command
+  - data:
+      command: CD-R
+      device: amplificador
+      delay_secs: 2
+      num_repeats: 2
+    target:
+      entity_id: remote.broadlink_remote_hub
+    action: remote.send_command
   mode: single
-- id: "1673456675256"
+- id: '1673351355869'
+  alias: Apagar Cine
+  description: Apaga la tele y todas las luces del salón
+  trigger:
+  - platform: device
+    device_id: d9192629be7456ee8c341b137d2eac5a
+    domain: media_player
+    entity_id: media_player.television
+    type: turned_off
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
+  - type: turn_off
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele_2
+    domain: light
+    enabled: false
+  - data:
+      command: power_off
+      device: amplificador
+    target:
+      entity_id: remote.broadlink_remote_hub
+    action: remote.send_command
+  - type: turn_off
+    device_id: f12220f23067f1b3874e7f6e83c511d9
+    entity_id: 8b30be4ffd2c38577af78cb540f2f9e1
+    domain: light
+  mode: single
+- id: '1673456675256'
   alias: Aspirar cocina
   description: Aspira el area de la cocina
   trigger: []
   condition: []
   action:
-    - service: xiaomi_miio.vacuum_clean_zone
-      data:
-        repeats: 2
-        zone:
-          - - 20666
-            - 20734
-            - 23666
-            - 26084
-      target:
-        entity_id: vacuum.aspirador
+  - service: xiaomi_miio.vacuum_clean_zone
+    data:
+      repeats: 2
+      zone:
+      - - 20666
+        - 20734
+        - 23666
+        - 26084
+    target:
+      entity_id: vacuum.aspirador
   mode: single
-- id: "1673517960702"
+- id: '1673517960702'
   alias: Auto - Encender Cine
-  description:
-    Si está la tele encendida cuando se va el sol, enciende las luces de
+  description: Si está la tele encendida cuando se va el sol, enciende las luces de
     la tele.
   trigger:
-    - platform: sun
-      event: sunset
-      offset: 0
+  - platform: sun
+    event: sunset
+    offset: 0
   condition:
-    - condition: device
-      device_id: d9192629be7456ee8c341b137d2eac5a
-      domain: media_player
-      entity_id: media_player.television
-      type: is_on
+  - condition: device
+    device_id: d9192629be7456ee8c341b137d2eac5a
+    domain: media_player
+    entity_id: media_player.television
+    type: is_on
   action:
-    - type: turn_on
-      device_id: 848c02320a43459fe3f4a094803baffb
-      entity_id: light.luz_tele_2
-      domain: light
-    - type: turn_on
-      device_id: 247c74391203fa852830509086051beb
-      entity_id: light.bombilla_salon
-      domain: light
+  - type: turn_on
+    device_id: f12220f23067f1b3874e7f6e83c511d9
+    entity_id: 8b30be4ffd2c38577af78cb540f2f9e1
+    domain: light
+    flash: long
+  - type: turn_on
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
   mode: single
-- id: "1674297151052"
+- id: '1674297151052'
   alias: Escritorio pekes
-  description: ""
+  description: ''
   trigger:
-    - type: turned_on
-      platform: device
-      device_id: 0976c25dfffbf93553597e13be940ebb
-      entity_id: binary_sensor.boton_pekes
-      domain: binary_sensor
+  - type: turned_on
+    platform: device
+    device_id: 0976c25dfffbf93553597e13be940ebb
+    entity_id: binary_sensor.boton_pekes
+    domain: binary_sensor
   condition: []
   action:
-    - type: toggle
-      device_id: 31c92efdcfabc776b8f6daf25a4e7553
-      entity_id: switch.enchufe_pekes_outlet
-      domain: switch
+  - type: toggle
+    device_id: 31c92efdcfabc776b8f6daf25a4e7553
+    entity_id: switch.enchufe_pekes_outlet
+    domain: switch
   mode: single
-- id: "1675873146590"
+- id: '1675873146590'
   alias: tv_on_lights
   description: tv_on_lights
   trigger: []
   condition: []
   action:
-    - type: turn_on
-      device_id: 848c02320a43459fe3f4a094803baffb
-      entity_id: light.luz_tele_2
-      domain: light
-    - type: turn_on
-      device_id: 247c74391203fa852830509086051beb
-      entity_id: light.bombilla_salon
-      domain: light
-      flash: long
+  - type: turn_on
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele_2
+    domain: light
+  - type: turn_on
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
+    flash: long
   mode: single
-- id: "1675873191214"
+- id: '1675873191214'
   alias: tv_off_lights
   description: tv_off_lights
   trigger: []
   condition: []
   action:
-    - type: turn_off
-      device_id: 848c02320a43459fe3f4a094803baffb
-      entity_id: light.luz_tele_2
-      domain: light
-    - type: turn_off
-      device_id: 247c74391203fa852830509086051beb
-      entity_id: light.bombilla_salon
-      domain: light
+  - type: turn_off
+    device_id: 848c02320a43459fe3f4a094803baffb
+    entity_id: light.luz_tele_2
+    domain: light
+  - type: turn_off
+    device_id: 247c74391203fa852830509086051beb
+    entity_id: light.bombilla_salon
+    domain: light
   mode: single
-- id: "1697239656693"
+- id: '1697239656693'
   alias: Pantalla tablet - movimiento
   description: Enciende y apaga la pantalla con el movimiento
   trigger:
-    - platform: state
-      entity_id:
-        - switch.qcom_btd_deteccion_de_movimiento
-      to: "on"
-      id: Movimiento
-    - platform: state
-      entity_id:
-        - switch.qcom_btd_deteccion_de_movimiento
-      to: "off"
-      id: No motion
+  - platform: state
+    entity_id:
+    - switch.qcom_btd_deteccion_de_movimiento
+    to: 'on'
+    id: Movimiento
+  - platform: state
+    entity_id:
+    - switch.qcom_btd_deteccion_de_movimiento
+    to: 'off'
+    id: No motion
   condition: []
   action:
-    - choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - Movimiento
-          sequence:
-            - service: switch.turn_on
-              data: {}
-              target:
-                entity_id: switch.qcom_btd_pantalla
-        - conditions:
-            - condition: trigger
-              id:
-                - No motion
-          sequence:
-            - service: switch.turn_off
-              data: {}
-              target:
-                entity_id: switch.qcom_btd_pantalla
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - Movimiento
+      sequence:
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.qcom_btd_pantalla
+    - conditions:
+      - condition: trigger
+        id:
+        - No motion
+      sequence:
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.qcom_btd_pantalla
   mode: single
-- id: "1699644794912"
+- id: '1699644794912'
   alias: Enchufe ordenadores
-  description: ""
+  description: ''
   trigger:
-    - type: turned_on
-      platform: device
-      device_id: c387944d9fa5e408f535ce3f7d12bd8f
-      entity_id: 927a8b5b00ff870a85d3027f3d132bfc
-      domain: binary_sensor
+  - type: turned_on
+    platform: device
+    device_id: c387944d9fa5e408f535ce3f7d12bd8f
+    entity_id: 927a8b5b00ff870a85d3027f3d132bfc
+    domain: binary_sensor
   condition: []
   action:
-    - type: toggle
-      device_id: 43333520b604e9079181f8d50dffb8ff
-      entity_id: 3d0a36d6ccec6a773f09ea8fc05858a8
-      domain: switch
+  - type: toggle
+    device_id: 43333520b604e9079181f8d50dffb8ff
+    entity_id: 3d0a36d6ccec6a773f09ea8fc05858a8
+    domain: switch
   mode: single
-
 - alias: New device registered
   id: New device registered
   mode: queued
@@ -216,35 +226,233 @@
     event_type: entity_registry_updated
     event_data:
       action: create
-  condition: >
-    {{trigger.event.data.entity_id.startswith('device_tracker')}}
+  condition: '{{trigger.event.data.entity_id.startswith(''device_tracker'')}}
+
+    '
   action:
-    - variables:
-        entity: >
-          {{trigger.event.data.entity_id}}
-    - service: system_log.write
-      data:
-        message: >
-          New device registrered: {{state_attr(entity,'friendly_name')}}
-        level: warning
-        logger: homeassistant.components.device_tracker
-    - service: persistent_notification.create
-      data:
-        title: >
-          New device registered: {{state_attr(entity,'friendly_name')}}
-        message: >
-          Entity: {{entity}}
-          Host: {{state_attr(entity,'host_name')}}
-          Ip: {{state_attr(entity,'ip')}}
-          Mac-address: {{state_attr(entity,'mac')}}
-          Id: {{device_id(entity)}}
-    - service: notify.centralperk
-      data:
-        title: >
-          ⚠ New device registered: {{state_attr(entity,'friendly_name')}}
-        message: >
-          Entity: {{entity}}
-          Host: {{state_attr(entity,'host_name')}}
-          Ip: {{state_attr(entity,'ip')}}
-          Mac-address: {{state_attr(entity,'mac')}}
-          Id: {{device_id(entity)}}
+  - variables:
+      entity: '{{trigger.event.data.entity_id}}
+
+        '
+  - service: system_log.write
+    data:
+      message: 'New device registrered: {{state_attr(entity,''friendly_name'')}}
+
+        '
+      level: warning
+      logger: homeassistant.components.device_tracker
+  - service: persistent_notification.create
+    data:
+      title: 'New device registered: {{state_attr(entity,''friendly_name'')}}
+
+        '
+      message: 'Entity: {{entity}} Host: {{state_attr(entity,''host_name'')}} Ip:
+        {{state_attr(entity,''ip'')}} Mac-address: {{state_attr(entity,''mac'')}}
+        Id: {{device_id(entity)}}
+
+        '
+  - service: notify.centralperk
+    data:
+      title: '⚠ New device registered: {{state_attr(entity,''friendly_name'')}}
+
+        '
+      message: 'Entity: {{entity}} Host: {{state_attr(entity,''host_name'')}} Ip:
+        {{state_attr(entity,''ip'')}} Mac-address: {{state_attr(entity,''mac'')}}
+        Id: {{device_id(entity)}}
+
+        '
+- alias: Vacuum Returning
+  trigger:
+  - platform: state
+    entity_id: sensor.vacuum_status
+    to: returning_home
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.room_cleaning
+      value: volviendo
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Volviendo a la base
+  id: 56d3362a835e4690ae0439164a254ebf
+- alias: Vacuum Idle
+  trigger:
+  - platform: state
+    entity_id: sensor.vacuum_status
+    to: paused
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.room_cleaning
+      value: pausa
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: En pausa
+  id: 28d6283d818c4476b6ad5ae1172a7793
+- alias: Vacuum Cargando
+  trigger:
+  - platform: state
+    entity_id: sensor.vacuum_status
+    to: charging
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.room_cleaning
+      value: cargando
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Cargando en la base
+  id: 11d48ca2f95b4da5b83e639182f2c422
+- alias: Vacuum Limpiando
+  trigger:
+  - platform: state
+    entity_id: sensor.vacuum_status
+    to: cleaning
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.room_cleaning
+      value: casa
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando toda la casa
+  id: 1c6d960311b84637b54a885ed1f1d43f
+- alias: Vacuum Limpiando Cocina
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: cocina
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando Cocina
+  id: 9417e7532bdc4fe68d14ece6989c0520
+- alias: Vacuum Limpiando Comedor
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: comedor
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando Comedor
+  id: 40f4527557c7433781810bf7170bc043
+- alias: Vacuum Limpiando Mario
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: mario
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando la habitación de Mario
+  id: e23dd1063ac74b979436729db77f2d17
+- alias: Vacuum limpiando Daniel
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: daniel
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando la habitación de Daniel
+  id: 467502ec36ec45ac9fc2c8e49b158daa
+- alias: Vacuum limpiando Baño de fuera
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: bano1
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: bano_uno
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando el baño de fuera
+  id: e8f0c54226d44bc48eb785732a0b73e5
+- alias: Vacuum limpiando Baño de dentro
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: bano2
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: bano_dos
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando el baño de dentro
+  id: a3de08829b68490b87079c738e6dba44
+- alias: Vacuum limpiando entrada
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: entrada
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando la entrada
+  id: f6cb46e55d8348749e88f1790d6a9190
+- alias: Vacuum limpiando habitación principal
+  trigger:
+  - platform: state
+    entity_id: input_text.room_cleaning
+    to: principal
+  action:
+  - service: input_text.set_value
+    data_template:
+      entity_id: input_text.fulldash_vacuum_status
+      value: Limpiando la habitación principal
+  id: c1f8983785394ac4af5f0c17185ce2a3
+- id: '1715611360192'
+  alias: Encender terraza
+  description: ''
+  trigger:
+  - type: occupied
+    platform: device
+    device_id: 7443e3e42cc304c2727c7ce3471ac85c
+    entity_id: 91f57d04305479c0b4b220c0d87bf530
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: sensor.sensor_de_presencia_ultimo_estado_de_iluminacion
+    state: Dark
+    enabled: false
+  action:
+  - metadata: {}
+    data:
+      brightness_pct: 100
+      kelvin: 5472
+      transition: 1
+    target:
+      device_id: 02676ba75ce09df2788b27266ca3b042
+    action: light.turn_on
+  mode: single
+- id: '1715611460605'
+  alias: Apagar luz terraza
+  description: ''
+  trigger:
+  - type: not_occupied
+    platform: device
+    device_id: 7443e3e42cc304c2727c7ce3471ac85c
+    entity_id: 91f57d04305479c0b4b220c0d87bf530
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      device_id: 02676ba75ce09df2788b27266ca3b042
+    data:
+      transition: 1
+  mode: single

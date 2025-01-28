@@ -1,0 +1,11 @@
+########## NAME ##########
+- type: "custom:config-template-card"
+  entities:
+    - light.XXX
+  element: ELEMENT
+  style:
+    top: 50%
+    left: 50%
+    width: 100%
+    pointer-events: none
+    mix-blend-mode: lighten

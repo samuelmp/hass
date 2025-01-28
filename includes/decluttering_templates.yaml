@@ -295,3 +295,168 @@ power_consumption_device:
               state: false
               legend: false
               fill: fade
+
+temperature_toggle_device1:
+  default:
+    - title: "off"
+    - entity_1: ""
+    - entity_1_icon: mdi:home-thermometer-outline
+    - entity_1_title: title1
+    - entity_2: ""
+    - entity_2_icon: mdi:water-percent
+    - entity_2_title: title2
+    - entity_3_battery: ""
+    - defaultOpen: true
+  card:
+    type: custom:stack-in-card
+    keep:
+      margin: false
+      box_shadow: false
+      background: false
+    cards:
+      - type: custom:mushroom-chips-card
+        alignment: justify
+        chips:
+          - type: template
+            content: "[[title]]"
+            card_mod:
+              style: |
+                ha-card {
+                  background: transparent !important;
+                  box-shadow: none !important;
+                }
+          - type: template
+            icon_color: |-
+              {% set bl = states(entity) | int %}
+              {% if bl < 30 %} red
+              {% elif bl < 50 %} orange
+              {% elif bl <= 100 %} green
+              {% else %} grey
+              {% endif %}
+            tap_action:
+              action: more-info
+            icon: |-
+              {% set bl = states(entity) | int %}
+              {% if bl < 10 %} mdi:battery-outline
+              {% elif bl < 20 %} mdi:battery-10
+              {% elif bl < 30 %} mdi:battery-20
+              {% elif bl < 40 %} mdi:battery-30
+              {% elif bl < 50 %} mdi:battery-40
+              {% elif bl < 60 %} mdi:battery-50
+              {% elif bl < 70 %} mdi:battery-60
+              {% elif bl < 80 %} mdi:battery-70
+              {% elif bl < 90 %} mdi:battery-80
+              {% elif bl < 100 %} mdi:battery-90
+              {% elif bl == 100 %} mdi:battery
+              {% else %} mdi:battery-unknown
+              {% endif %}
+            content: "{{ states(entity)\_}} {{ state_attr(entity, \"unit_of_measurement\") }}"
+            entity: "[[entity_3_battery]]"
+            card_mod:
+              style: |
+                ha-card {
+                  background: transparent !important;
+                  box-shadow: none !important;
+                {% if '[[entity_3_battery]]' == '' %}
+                  display: none !important;
+                {% endif %}
+                }
+        card_mod:
+          style: |
+            ha-card {
+              padding: 6px var(--spacing) 0 8px !important;
+              margin: 0;
+              background-color: transparent;
+              box-shadow: none;
+            {% if '[[title]]' == 'off' %}
+              display: none !important;
+              {% endif %}
+            }
+      - type: custom:collapsable-cards
+        title: "[[title]]"
+        defaultOpen: "[[defaultOpen]]"
+        buttonStyle: >
+          padding: 0px 8px 0px 0px; background: var( --ha-card-background,
+          var(--card-background-color, white) ) !important; margin: 0; top:
+          -4px; position: relative; background-color: transparent !important;
+        title_card:
+          type: grid
+          square: false
+          columns: 2
+          cards:
+            - type: custom:mushroom-template-card
+              entity: "[[entity_1]]"
+              primary: >-
+                {{ states(entity) }} {{ state_attr(entity,
+                "unit_of_measurement") }}
+              secondary: "[[entity_1_title]]"
+              icon_color: |-
+                {% set temp = states(entity) %}
+                {% if temp >= '30' %}
+                  red
+                {% elif temp >= '17' and temp < '30' %}
+                  orange
+                {% elif temp == 'unknown' %}
+                  grey
+                {% else %}
+                  blue
+                {% endif %}
+              icon: "[[entity_1_icon]]"
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: transparent;
+                    box-shadow: none;
+                  }
+                  ha-card > mushroom-card {
+                    display: flex;
+                  }
+              tap_action:
+                action: more-info
+            - type: custom:mushroom-template-card
+              entity: "[[entity_2]]"
+              primary: >-
+                {{ states(entity) }} {{ state_attr(entity,
+                "unit_of_measurement") }}
+              secondary: "[[entity_2_title]]"
+              icon_color: blue
+              icon: "[[entity_2_icon]]"
+              tap_action:
+                action: more-info
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: transparent;
+                    box-shadow: none;
+                  }
+                  ha-card > mushroom-card {
+                    display: flex;
+                  }
+        cards:
+          - type: custom:mini-graph-card
+            entities:
+              - entity: "[[entity_1]]"
+                name: "[[entity_1_title]]"
+                color: "#ec085d"
+              - entity: "[[entity_2]]"
+                name: "[[entity_2_title]]"
+                color: "#0c87f7"
+                y_axis: secondary
+            hours_to_show: 24
+            line_width: 3
+            font_size: 50
+            animate: true
+            group: true
+            height: 70
+            show:
+              name: false
+              icon: false
+              state: false
+              legend: false
+              fill: fade
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: transparent;
+                  box-shadow: none;
+                }

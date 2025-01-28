@@ -102,8 +102,10 @@ spotcast:
 input_text:
   room_cleaning:
     name: Currently Cleaning Room
-    initial: charging
-
+    initial: cargando
+  fulldash_vacuum_status:
+    name: Currently Status Text
+    initial: Cargando en la base
 # sensor:
 # - platform: systemmonitor
 #   resources:
@@ -203,7 +205,7 @@ lovelace:
 
       { url: "/local/marked.min.js?v=4.2.5", type: module },
       { url: "/local/vanilla-tilt.min.js?v=1.8.0", type: module },
-      { url: "/local/browser_mod_icon.js?v=0.5", type: module },
+      { url: "/local/browser_mod_icon.js?v=0.6", type: module },
       { url: "/local/decluttering-card.js", type: module },
       { url: "/local/collapsable-cards.js", type: module },
       { url: "/local/snowflakes.js?v=20.23", type: module },

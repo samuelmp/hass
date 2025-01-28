@@ -21,15 +21,308 @@ custom_header:
         disable_sidebar: true
         kiosk_mode: true
 
-
-
 title: Lust & Freud
 theme: slate
 views:
-
   - title: Control Rooms
-    icon: 'mdi:floor-plan'
+    icon: "mdi:floor-plan"
     theme: slate
     panel: true
     badges: []
     cards:
+      - type: picture-elements
+        image: /local/fulldash/ui/floorplan/main_night.png
+        elements:
+          ##########################    DAY BASE FLOORPLAN OVERLAY    #########################
+          - action: none
+            entity: sun.sun
+            hold_action:
+              action: none
+            state_image:
+              above_horizon: /local/fulldash/ui/floorplan/floorplan_day.png
+              below_horizon: /local/fulldash/transparent.png
+            style:
+              height: 100%
+              left: 50%
+              mix-blend-mode: lighten
+              opacity: "${ states['sensor.sunlight_opacity'].state }"
+              top: 50%
+              width: 100%
+            tap_action:
+              action: none
+            type: image
+
+          ##########################    WEATHER ANIMATIONS    #########################
+          - action: none
+            entity: weather.casa
+            hold_action:
+              action: none
+            image: /local/fulldash/transparent.png
+            state_image:
+              "rainy": /local/fulldash/ui/floorplan/weather/rainstorm.gif
+            style:
+              left: 44%
+              mix-blend-mode: color-dodge
+              top: 50%
+              width: 110%
+            tap_action:
+              action: none
+            type: image
+          ##########################    INDIVIDUAL LIGHTS - BLENDED IMAGE OVERLAYS    #########################
+
+          ######### ENTRADA ########
+          - type: "custom:config-template-card"
+            entities:
+              - light.bombilla_entrada
+            element:
+              action: none
+              entity: light.bombilla_entrada
+              hold_action:
+                action: none
+              image: /local/fulldash/ui/floorplan/lights/entrada.png
+              style:
+                filter: >-
+                  ${ "hue-rotate(" + (states['light.bombilla_entrada'].attributes.hs_color
+                  ? states['light.bombilla_entrada'].attributes.hs_color[0] - 30 : 0) + "deg)
+                  saturate(" + (states['light.bombilla_entrada'].attributes.hs_color ? states['light.bombilla_entrada'].attributes.hs_color[1] + 130 : 130) + "%)"}
+                mix-blend-mode: lighten
+                opacity: "${states['light.bombilla_entrada'].state === 'on' ? (states['light.bombilla_entrada'].attributes.brightness / 255) : '0'}"
+              tap_action:
+                action: none
+              type: image
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              pointer-events: none
+              mix-blend-mode: lighten
+
+          - entity: light.bombilla_entrada
+            icon: mdi:lightbulb-outline
+            type: custom:button-card
+            hold_action:
+              action: more-info
+            style:
+              left: 53%
+              top: 41%
+              opacity: 1
+            template:
+              - light
+
+              ########## TELE ##########
+          - type: "custom:config-template-card"
+            entities:
+              - light.luz_tele_2
+            element:
+              action: none
+              entity: light.luz_tele_2
+              hold_action:
+                action: none
+              image: /local/fulldash/ui/floorplan/lights/tv.png
+              style:
+                filter: >-
+                  ${ "hue-rotate(" + (states['light.luz_tele_2'].attributes.hs_color
+                  ? states['light.luz_tele_2'].attributes.hs_color[0] - 30 : 0) + "deg)
+                  saturate(" + (states['light.luz_tele_2'].attributes.hs_color ? states['light.luz_tele_2'].attributes.hs_color[1] + 130 : 130) + "%)"}
+                opacity: "${states['light.luz_tele_2'].state === 'on' ? (states['light.luz_tele_2'].attributes.brightness / 255) : '0'}"
+              tap_action:
+                action: none
+              type: image
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              pointer-events: none
+              mix-blend-mode: lighten
+          - entity: light.luz_tele_2
+            icon: mdi:lightbulb-outline
+            type: custom:button-card
+            hold_action:
+              action: more-info
+            style:
+              left: 34%
+              top: 63%
+              opacity: 1
+            template:
+              - light
+
+          ########## ORDENADORES ##########
+          - type: "custom:config-template-card"
+            entities:
+              - light.tira_led_ordenadores
+            element:
+              action: none
+              entity: light.tira_led_ordenadores
+              hold_action:
+                action: none
+              image: /local/fulldash/ui/floorplan/lights/mario.png
+              style:
+                filter: >-
+                  ${ "hue-rotate(" + (states['light.tira_led_ordenadores'].attributes.hs_color
+                  ? states['light.tira_led_ordenadores'].attributes.hs_color[0] - 30 : 0) + "deg)
+                  saturate(" + (states['light.tira_led_ordenadores'].attributes.hs_color ? states['light.tira_led_ordenadores'].attributes.hs_color[1] + 130 : 130) + "%)"}
+                opacity: "${states['light.tira_led_ordenadores'].state === 'on' ? (states['light.tira_led_ordenadores'].attributes.brightness / 255) : '0'}"
+              tap_action:
+                action: none
+              type: image
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              pointer-events: none
+              mix-blend-mode: lighten
+          - entity: light.tira_led_ordenadores
+            icon: mdi:led-strip
+            type: custom:button-card
+            hold_action:
+              action: more-info
+            style:
+              left: 59%
+              top: 68%
+              opacity: 1
+            template:
+              - light
+          ########## DANIEL ##########
+          - type: "custom:config-template-card"
+            entities:
+              - light.bombilla_pekes
+            element:
+              action: none
+              entity: light.bombilla_pekes
+              hold_action:
+                action: none
+              image: /local/fulldash/ui/floorplan/lights/daniel.png
+              style:
+                filter: >-
+                  ${ "hue-rotate(" + (states['light.bombilla_pekes'].attributes.hs_color
+                  ? states['light.bombilla_pekes'].attributes.hs_color[0] - 30 : 0) + "deg)
+                  saturate(" + (states['light.bombilla_pekes'].attributes.hs_color ? states['light.bombilla_pekes'].attributes.hs_color[1] + 130 : 130) + "%)"}
+                opacity: "${states['light.bombilla_pekes'].state === 'on' ? (states['light.bombilla_pekes'].attributes.brightness / 255) : '0'}"
+              tap_action:
+                action: none
+              type: image
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              pointer-events: none
+              mix-blend-mode: lighten
+          - entity: light.bombilla_pekes
+            icon: mdi:led-strip
+            type: custom:button-card
+            hold_action:
+              action: more-info
+            style:
+              left: 70%
+              top: 45%
+              opacity: 1
+            template:
+              - light
+          ########## BOMBILLA SALON ##########
+          - type: "custom:config-template-card"
+            entities:
+              - light.bombilla_salon
+            element:
+              action: none
+              entity: light.bombilla_salon
+              hold_action:
+                action: none
+              image: /local/fulldash/ui/floorplan/lights/comedor.png
+              style:
+                filter: >-
+                  ${ "hue-rotate(" + (states['light.bombilla_salon'].attributes.hs_color
+                  ? states['light.bombilla_salon'].attributes.hs_color[0] - 30  : 0) + "deg)
+                  saturate(" + (states['light.bombilla_salon'].attributes.hs_color ? states['light.bombilla_salon'].attributes.hs_color[1] + 130 : 130) + "%)"}
+                opacity: "${states['light.bombilla_salon'].state === 'on' ? (states['light.bombilla_salon'].attributes.brightness / 255) : '0'}"
+              tap_action:
+                action: none
+              type: image
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              pointer-events: none
+              mix-blend-mode: lighten
+          - entity: light.bombilla_salon
+            icon: mdi:lightbulb-outline
+            type: custom:button-card
+            hold_action:
+              action: more-info
+            style:
+              left: 34%
+              top: 51%
+              opacity: 1
+            template:
+              - light
+          ########## BOMBILLA COCINA ##########
+          - type: "custom:config-template-card"
+            entities:
+              - light.tira_led_cocina
+            element:
+              action: none
+              entity: light.tira_led_cocina
+              hold_action:
+                action: none
+              image: /local/fulldash/ui/floorplan/lights/cocina.png
+              style:
+                filter: >-
+                  ${ "hue-rotate(" + (states['light.tira_led_cocina'].attributes.hs_color
+                  ? states['light.tira_led_cocina'].attributes.hs_color[0] - 30 : 0) + "deg)
+                  saturate(" + (states['light.tira_led_cocina'].attributes.hs_color ? states['light.tira_led_cocina'].attributes.hs_color[1] + 130 : 130) + "%)"}
+                opacity: "${states['light.tira_led_cocina'].state === 'on' ? (states['light.tira_led_cocina'].attributes.brightness / 255) : '0'}"
+              tap_action:
+                action: none
+              type: image
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              pointer-events: none
+              mix-blend-mode: lighten
+          - entity: light.tira_led_cocina
+            icon: mdi:led-strip-variant
+            type: custom:button-card
+            hold_action:
+              action: more-info
+            style:
+              left: 45%
+              top: 29%
+              opacity: 1
+            template:
+              - light
+          ########## PLAFON DORMITORIO ##########
+          - type: "custom:config-template-card"
+            entities:
+              - light.plaflon_dormitorio
+            element:
+              action: none
+              entity: light.plaflon_dormitorio
+              hold_action:
+                action: none
+              image: /local/fulldash/ui/floorplan/lights/principal.png
+              style:
+                filter: >-
+                  ${ "hue-rotate(" + (states['light.plaflon_dormitorio'].attributes.hs_color
+                  ? states['light.plaflon_dormitorio'].attributes.hs_color[0] - 30 : 0) + "deg)
+                  saturate(" + (states['light.plaflon_dormitorio'].attributes.hs_color ? states['light.plaflon_dormitorio'].attributes.hs_color[1] + 130 : 130) + "%)"}
+                opacity: "${states['light.plaflon_dormitorio'].state === 'on' ? (states['light.plaflon_dormitorio'].attributes.brightness / 255) : '0'}"
+              tap_action:
+                action: none
+              type: image
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              pointer-events: none
+              mix-blend-mode: lighten
+          - entity: light.tira_led_cocina
+            icon: mdi:light-recessed
+            type: custom:button-card
+            hold_action:
+              action: more-info
+            style:
+              left: 70%
+              top: 38%
+              opacity: 1
+            template:
+              - light

@@ -23,10 +23,11 @@
       friendly_name: Tablet View
 
     ## Calculates daylight brightness out of 100%
+    ## {%- set cloud_coverage = states('sensor.dark_sky_cloud_coverage') | float %}
     sunlight_pct:
       value_template: >-
         {%- set elevation = state_attr('sun.sun','elevation') | float %}
-        {%- set cloud_coverage = states('sensor.dark_sky_cloud_coverage') | float %}
+        {%- set cloud_coverage = 1 | float %}
         {%- set cloud_factor = (1 - (0.75 * ( cloud_coverage / 100) ** 3 )) %}
         {%- set min_elevation = -6 %}
         {%- set max_elevation = 90 %}
@@ -68,41 +69,44 @@
 
     vacuum_status:
       friendly_name: "Vacuum - Status"
-      value_template: "{{ states.vacuum.aspirador.attributes.status }}"
-
-    vacuum_cleaning_status:
-      friendly_name: "Vacuum - Cleaning Status"
-      value_template: "Cleaning {{ states('input_text.room_cleaning') }}"
+      value_template: "{{ states.vacuum.roborock_q5_pro.attributes.status }}"
 
     vacuum_battery:
       friendly_name: "Vacuum - Battery"
-      value_template: "{{ states.vacuum.aspirador.attributes.battery_level }}"
+      value_template: "{{ states.vacuum.roborock_q5_pro.attributes.battery_level }}"
       device_class: battery
       unit_of_measurement: "%"
 
     vacuum_fan:
       friendly_name: "Vacuum - Fan Speed"
-      value_template: "{{ states.vacuum.aspirador.attributes.fan_speed }}"
+      value_template: "{{ states.vacuum.roborock_q5_pro.attributes.fan_speed }}"
 
     vacuum_battery_icon:
       friendly_name: "Vacuum - Battery Icon"
-      icon_template: "{{ states.vacuum.aspirador.attributes.battery_icon }}"
-      value_template: "{{ states.vacuum.aspirador.attributes.battery_icon }}"
+      icon_template: "{{ states.vacuum.roborock_q5_pro.attributes.battery_icon }}"
+      value_template: "{{ states.vacuum.roborock_q5_pro.attributes.battery_icon }}"
 
     vacuum_cleaning_time:
       friendly_name: "Vacuum - Cleaning Time"
-      value_template: "{{ states.vacuum.aspirador.attributes.cleaning_time }}"
+      value_template: "{{ states.vacuum.roborock_q5_pro.attributes.cleaning_time }}"
 
     vacuum_cleaned_area:
       friendly_name: "Vacuum - Cleaned Area"
-      value_template: "{{ states.vacuum.aspirador.attributes.cleaned_area }}"
+      value_template: "{{ states.vacuum.roborock_q5_pro.attributes.cleaned_area }}"
     home_assistant_installed_version:
       friendly_name: "Versión Instalada"
       value_template: "{{ states.update.home_assistant_core_update.attributes.installed_version }}"
     home_assistant_latest_version:
       friendly_name: "Última versión"
       value_template: "{{ states.update.home_assistant_core_update.attributes.latest_version }}"
-
+    count_lights_on:
+      friendly_name: "Total lights on"
+      unit_of_measurement: "on"
+      value_template: "{{expand(state_attr('light.todas_las_luces', 'entity_id'))| selectattr('state','eq','on')|map(attribute='entity_id')|list|count}}"
+    count_sockets_on:
+      friendly_name: "Total sockets on"
+      unit_of_measurement: "on"
+      value_template: "{{expand(state_attr('switch.todos_los_enchufes', 'entity_id'))| selectattr('state','eq','on')|map(attribute='entity_id')|list|count}}"
 - platform: integration
   source: sensor.consumo_regleta_comedor
   name: super_regleta_energy

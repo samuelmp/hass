@@ -1,3 +1,4 @@
+button_card_templates: !include ../button_card_templates/footer.yaml
 action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
